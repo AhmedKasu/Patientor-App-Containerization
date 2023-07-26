@@ -1,32 +1,32 @@
-import React from 'react';
-import axios from 'axios';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
-import { Button, Divider, Container, Typography } from '@material-ui/core';
+import React from 'react'
+import axios from 'axios'
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom'
+import { Button, Divider, Container, Typography } from '@material-ui/core'
 
-import { apiBaseUrl } from './constants';
-import { useStateValue, setPatientList } from './state';
-import { Patient } from './types';
+import { apiBaseUrl } from './constants'
+import { useStateValue, setPatientList } from './state'
+import { Patient } from './types'
 
-import PatientListPage from './PatientListPage';
-import PatientDetails from './PatientDetails';
+import PatientListPage from './PatientListPage'
+import PatientDetails from './PatientDetails'
 
 const App = () => {
-  const [, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue()
   React.useEffect(() => {
-    void axios.get<void>(`${apiBaseUrl}/ping`);
+    void axios.get<void>(`${apiBaseUrl}/ping`)
 
     const fetchPatientList = async () => {
       try {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
           `${apiBaseUrl}/patients`
-        );
-        dispatch(setPatientList(patientListFromApi));
+        )
+        dispatch(setPatientList(patientListFromApi))
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
-    };
-    void fetchPatientList();
-  }, [dispatch]);
+    }
+    void fetchPatientList()
+  }, [dispatch])
 
   return (
     <div className='App'>
@@ -41,12 +41,12 @@ const App = () => {
           <Divider hidden />
           <Routes>
             <Route path='/patients/:id' element={<PatientDetails />} />
-            <Route path='/' element={<PatientListPage />} />
+            <Route path='/' element={<PatientListPage patients={patients} />} />
           </Routes>
         </Container>
       </Router>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
