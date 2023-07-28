@@ -1,3 +1,4 @@
+import React from 'react';
 import { HospitalEntry as HospitalEntryType, Diagnosis } from '../../types';
 
 import Accordion from '@mui/material/Accordion';

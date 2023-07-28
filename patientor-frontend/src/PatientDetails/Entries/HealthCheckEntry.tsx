@@ -1,3 +1,4 @@
+import React from 'react';
 import { HealthCheckEntry as HealthCheckEntryType } from '../../types';
 
 import Accordion from '@mui/material/Accordion';

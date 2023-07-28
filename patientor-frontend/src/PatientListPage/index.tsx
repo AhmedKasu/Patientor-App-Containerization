@@ -1,5 +1,5 @@
-import React from 'react'
-import axios from 'axios'
+import React from 'react';
+import axios from 'axios';
 import {
   Box,
   Table,
@@ -9,51 +9,54 @@ import {
   TableCell,
   TableRow,
   TableBody,
-} from '@material-ui/core'
+} from '@material-ui/core';
 
-import { PatientFormValues } from '../AddPatientModal/AddPatientForm'
-import AddPatientModal from '../AddPatientModal'
-import { Patient } from '../types'
-import { apiBaseUrl } from '../constants'
-import HealthRatingBar from '../components/HealthRatingBar'
-import { useStateValue, addPatient } from '../state'
+import { PatientFormValues } from '../AddPatientModal/AddPatientForm';
+import AddPatientModal from '../AddPatientModal';
+import { Patient } from '../types';
+import { apiBaseUrl } from '../constants';
+import HealthRatingBar from '../components/HealthRatingBar';
+import { useStateValue, addPatient } from '../state';
 
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 interface Props {
-  patients: { [id: string]: Patient }
+  patients: { [id: string]: Patient };
 }
 const PatientListPage = ({ patients }: Props) => {
-  const [, dispatch] = useStateValue()
+  const [, dispatch] = useStateValue();
 
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false)
-  const [error, setError] = React.useState<string>()
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>();
 
-  const openModal = (): void => setModalOpen(true)
+  const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {
-    setModalOpen(false)
-    setError(undefined)
-  }
+    setModalOpen(false);
+    setError(undefined);
+  };
 
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
       const { data: newPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients`,
         values
-      )
-      dispatch(addPatient(newPatient))
-      closeModal()
+      );
+      dispatch(addPatient(newPatient));
+      closeModal();
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
-        console.error(e?.response?.data || 'Unrecognized axios error')
-        setError(String(e?.response?.data?.error) || 'Unrecognized axios error')
+        console.error(e?.response?.data || 'Unrecognized axios error');
+        setError(
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          String(e?.response?.data?.error) || 'Unrecognized axios error'
+        );
       } else {
-        console.error('Unknown error', e)
-        setError('Unknown error')
+        console.error('Unknown error', e);
+        setError('Unknown error');
       }
     }
-  }
+  };
 
   return (
     <div className='App'>
@@ -96,7 +99,7 @@ const PatientListPage = ({ patients }: Props) => {
         Add New Patient
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default PatientListPage
+export default PatientListPage;

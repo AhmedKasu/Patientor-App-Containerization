@@ -1,3 +1,4 @@
+import React from 'react';
 import { Male, Female } from '@mui/icons-material';
 import { Patient } from '../types';
 
