@@ -1,5 +1,6 @@
 import React from 'react';
-import { Male, Female } from '@mui/icons-material';
+import Male from '@mui/icons-material/Male';
+import Female from '@mui/icons-material/Female';
 import { Patient } from '../types';
 
 interface Props {
