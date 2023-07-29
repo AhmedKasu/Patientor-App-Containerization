@@ -34,7 +34,7 @@ const HospitalEntry = ({ entry, diagnoses }: Props) => {
             expandIcon={<ExpandMoreIcon />}
             aria-controls='panel1a-content'
             id='panel1a-header'>
-            <Typography>DIagnoses</Typography>
+            <Typography>Diagnoses</Typography>
           </AccordionSummary>
           <AccordionDetails>
             {entry.diagnosisCodes?.map((code) => (

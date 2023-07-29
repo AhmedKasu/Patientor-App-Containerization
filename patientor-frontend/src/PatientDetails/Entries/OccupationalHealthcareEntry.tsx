@@ -30,7 +30,7 @@ const OccupationalHealthcareEntry = ({ entry, diagnoses }: Props) => {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>{entry.description}</Typography>
-          <Typography>Employee: {entry.employerName}</Typography>
+          <Typography>Employer: {entry.employerName}</Typography>
 
           <Typography> diagnose by {entry.specialist}</Typography>
         </AccordionDetails>
