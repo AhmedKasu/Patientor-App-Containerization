@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { apiBaseUrl } from '../constants';
 import { useStateValue, setPatientDetails, addEntry } from '../state';
-import { Entry, PatientInfo, EntryFormValues } from '../types';
+import { Entry, PatientInfo, EntryFormValues, Diagnosis } from '../types';
 
 import GenderIcons from '../components/GenderIcons';
 import Entries from './Entries';
@@ -18,8 +18,44 @@ import { isFetched } from '../utils/patientDetailsHelper';
 import AddEntryModal from '../AddEntryModal';
 import { valuesToSubmit } from '../utils/addEntryFormHelper';
 
-const PatientDetails = () => {
-  const [{ patients }, dispatch] = useStateValue();
+interface Props {
+  patient: PatientInfo;
+  diagnoses: { [code: string]: Diagnosis };
+}
+export const PatientDetails = ({ patient, diagnoses }: Props) => (
+  <>
+    <Card sx={{ minWidth: 275, marginTop: '2em' }}>
+      <CardContent>
+        <Typography variant='h5' component='div'>
+          {patient.name} <GenderIcons patient={patient} />
+        </Typography>
+
+        <Typography style={{ marginTop: '1em' }} variant='body2'>
+          ssn: {patient.ssn}
+        </Typography>
+
+        <Typography style={{ marginBottom: '1em' }} variant='body2'>
+          {' '}
+          occupation: {patient.occupation}
+        </Typography>
+      </CardContent>
+    </Card>
+    <Card sx={{ minWidth: 275, marginTop: '2em' }}>
+      <CardContent>
+        <Typography
+          style={{ marginBottom: '0.5em' }}
+          variant='h6'
+          component='div'>
+          Entries
+        </Typography>
+        <Entries entries={patient.entries} diagnoses={diagnoses} />
+      </CardContent>
+    </Card>
+  </>
+);
+
+const PatientDetailsContainer = () => {
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>();
   const { id } = useParams<{ id: string }>();
@@ -65,6 +101,7 @@ const PatientDetails = () => {
       if (axios.isAxiosError(e)) {
         console.error(e?.response?.data || 'Unrecognized axios error');
         setError(
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           String(e?.response?.data?.error) || 'Unrecognized axios error'
         );
       } else {
@@ -83,33 +120,8 @@ const PatientDetails = () => {
 
   return (
     <>
-      <Card sx={{ minWidth: 275, marginTop: '2em' }}>
-        <CardContent>
-          <Typography variant='h5' component='div'>
-            {patient.name} <GenderIcons patient={patient} />
-          </Typography>
+      <PatientDetails diagnoses={diagnoses} patient={patient} />
 
-          <Typography style={{ marginTop: '1em' }} variant='body2'>
-            ssn: {patient.ssn}
-          </Typography>
-
-          <Typography style={{ marginBottom: '1em' }} variant='body2'>
-            {' '}
-            occupation: {patient.occupation}
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card sx={{ minWidth: 275, marginTop: '2em' }}>
-        <CardContent>
-          <Typography
-            style={{ marginBottom: '0.5em' }}
-            variant='h6'
-            component='div'>
-            Entries
-          </Typography>
-          <Entries entries={patient.entries} />
-        </CardContent>
-      </Card>
       <Card sx={{ minWidth: 275, marginTop: '2em' }}>
         <CardActions>
           <AddEntryModal
@@ -127,4 +139,4 @@ const PatientDetails = () => {
   );
 };
 
-export default PatientDetails;
+export default PatientDetailsContainer;
