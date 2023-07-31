@@ -11,10 +11,11 @@ import OccupationalHealthcareEntry from './OccupationalHealthcareEntry';
 import assertNever from '../../utils/exhaustiveTypeHelper';
 interface Props {
   entries: Entry[];
+  diagnoses: { [code: string]: Diagnosis };
 }
 
-const Entries = ({ entries }: Props) => {
-  const [{ diagnoses }, dispatch] = useStateValue();
+const Entries = ({ entries, diagnoses }: Props) => {
+  const [, dispatch] = useStateValue();
 
   React.useEffect(() => {
     const getDiagnoses = async () => {
@@ -24,7 +25,6 @@ const Entries = ({ entries }: Props) => {
         );
 
         dispatch(setDiagnoses(diagnoses));
-        console.log('diagnoses fetched');
       } catch (e) {
         console.error(e);
       }
