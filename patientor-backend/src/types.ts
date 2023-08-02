@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 export type Diagnosis = {
   code: string;
   name: string;
@@ -10,11 +12,11 @@ export enum Gender {
 }
 
 export interface BaseEntry {
-  id: string;
   description: string;
   date: string;
   specialist: string;
   diagnosisCodes?: Array<Diagnosis['code']>;
+  patient: mongoose.Types.ObjectId;
 }
 
 export enum HealthCheckRating {
