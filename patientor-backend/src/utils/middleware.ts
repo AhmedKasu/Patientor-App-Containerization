@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Patient } from '../mongo';
 import { Patient as PatientType } from '../types';
-import { isMongoId } from './utils';
+import { isMongoId } from './typeGuards';
 
 export interface PatientReq extends Request {
   patient?: PatientType | null;
