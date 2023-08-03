@@ -8,10 +8,11 @@ import { Patient } from '../mongo';
 
 const router = Router();
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.get('/', async (_req, res) => {
-  const patients = await Patient.find({});
-  res.send(patients);
+router.get('/', (_req, res) => {
+  void (async () => {
+    const patients = await Patient.find({});
+    res.send(patients);
+  })();
 });
 
 // router.get('/:id', (req, res) => {
