@@ -1,4 +1,5 @@
 import { Gender, HealthCheckRating } from '../types';
+import { ObjectId } from 'mongodb';
 
 export const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -46,4 +47,8 @@ export const isHealthCheckRating = (param: any): param is HealthCheckRating => {
 
 export const isValidRating = (param: unknown): boolean => {
   return Number(param) > -1 && Number(param) < 4;
+};
+
+export const isMongoId = (id: unknown): id is string => {
+  return typeof id === 'string' && ObjectId.isValid(id);
 };
