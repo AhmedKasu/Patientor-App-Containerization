@@ -13,6 +13,8 @@ if (MONGO_URL && !connection.readyState) {
     .catch((error) => {
       console.log('error connection to MongoDB:', error.message);
     });
+
+  if (!MONGO_URL) console.log('MONGO_URL not provided!!');
 }
 
 export {
