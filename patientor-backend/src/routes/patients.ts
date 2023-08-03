@@ -1,10 +1,6 @@
-import { Router } from 'express';
-// import { NewPatient, PublicPatient, Entry } from '../types';
-
-// import toNewPatientInputs from '../utils/patientEntryHelpers';
-// import toNewEntry from '../utils/newEntryHelper';
-
+import { Response, Router } from 'express';
 import { Patient } from '../mongo';
+import { findByIdMiddleware, PatientReq } from '../utils/middleware';
 
 const router = Router();
 
@@ -15,14 +11,11 @@ router.get('/', (_req, res) => {
   })();
 });
 
-// router.get('/:id', (req, res) => {
-//   const patient = patientService.getPatient(req.params.id);
-//   if (patient) {
-//     res.send(patient);
-//   } else {
-//     res.status(404).send('Patient not found');
-//   }
-// });
+const singleRouter = Router();
+
+singleRouter.get('/', (req: PatientReq, res: Response) => {
+  res.send(req.patient).status(200);
+});
 
 // router.post('/', (req, res) => {
 //   try {
@@ -54,5 +47,6 @@ router.get('/', (_req, res) => {
 //     res.status(400).send(errorMessage);
 //   }
 // });
+router.use('/:id', findByIdMiddleware, singleRouter);
 
 export default router;
