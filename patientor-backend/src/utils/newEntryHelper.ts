@@ -14,7 +14,7 @@ import {
   isEntryType,
   isHealthCheckRating,
   isValidRating,
-} from './utils';
+} from './typeGuards';
 
 const parseLongTextInputs = (text: unknown): string => {
   if (!text || !isString(text) || text.length < 5) {

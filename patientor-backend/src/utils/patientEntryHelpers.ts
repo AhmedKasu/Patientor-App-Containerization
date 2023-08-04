@@ -1,5 +1,5 @@
 import { NewPatient, Gender } from '../types';
-import { isString, isDate, isGender, isSsnFormat } from './utils';
+import { isString, isDate, isGender, isSsnFormat } from './typeGuards';
 
 export const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {

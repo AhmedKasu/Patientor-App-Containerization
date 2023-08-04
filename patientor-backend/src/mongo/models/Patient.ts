@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import { Patient } from 'src/types';
-
+import { Patient } from '../../types';
 interface PatientModel extends Patient {
   entriesModel?: {
     type: StringConstructor;
