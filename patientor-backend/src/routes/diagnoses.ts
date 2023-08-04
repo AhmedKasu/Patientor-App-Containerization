@@ -1,11 +1,13 @@
 import { Router } from 'express';
-
-import diagnosesService from '../services/diagnosesService';
+import Diagnosis from '../mongo/models/Diagnosis';
 
 const router = Router();
 
 router.get('/', (_req, res) => {
-  res.send(diagnosesService.getDiagnoses());
+  void (async () => {
+    const diagnosis = await Diagnosis.find({});
+    res.send(diagnosis);
+  })();
 });
 
 export default router;
