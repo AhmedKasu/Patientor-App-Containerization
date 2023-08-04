@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { Patient } from '../../types';
 interface PatientModel extends Patient {
   entriesModel?: {
@@ -23,6 +23,14 @@ const patientSchema = new mongoose.Schema<PatientModel>({
   entriesModel: {
     type: String,
     enum: ['HospitalEntry', 'HealthCheckEntry', 'OccupationalHealthcareEntry'],
+  },
+});
+
+patientSchema.set('toJSON', {
+  transform: (_document: Document, returnedObject: Record<string, string>) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
   },
 });
 
