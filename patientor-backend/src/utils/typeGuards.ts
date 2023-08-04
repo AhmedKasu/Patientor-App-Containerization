@@ -16,7 +16,11 @@ export const isGender = (param: any): param is Gender => {
 };
 
 export const isSsnFormat = (ssn: string): boolean => {
-  return ssn.match(/^\d{6}[-]\d{4}$/) !== null;
+  return (
+    ssn.match(
+      /^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])\d{2}[-+A]\d{3}[0-9A-F]$/
+    ) !== null
+  );
 };
 
 export const isObject = (param: unknown): boolean => {
