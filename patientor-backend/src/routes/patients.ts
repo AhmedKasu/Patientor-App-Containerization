@@ -1,7 +1,7 @@
 import { Response, Router } from 'express';
 import { Patient } from '../mongo';
 import { findByIdMiddleware, PatientReq } from '../utils/middleware';
-import toNewPatientInputs from '../utils/patientEntryHelpers';
+import toNewPatientInputs from '../utils/patientInputsHelpers';
 import { NewPatient, PublicPatient } from 'src/types';
 
 const router = Router();
@@ -35,21 +35,23 @@ router.post('/', (req, res) => {
   })();
 });
 
-// router.post('/:id/entries', (req, res) => {
-//   try {
-//     const newEntry = patientService.addEntry(
-//       req.params.id,
-//       toNewEntry(req.body as Entry)
-//     );
-//     res.json(newEntry);
-//   } catch (error: unknown) {
-//     let errorMessage = 'Something went wrong.';
-//     if (error instanceof Error) {
-//       errorMessage += ' Error: ' + error.message;
+// singleRouter.post('/entries', (req, res) => {
+//   void (async () => {
+//     try {
+//       const entryInput = toNewEntryInputs(req.body as EntryFields);
+//       const newEntry: Entry = await Entry.create(entryInput);
+
+//       res.json(newEntry);
+//     } catch (error: unknown) {
+//       let errorMessage = 'Something went wrong.';
+//       if (error instanceof Error) {
+//         errorMessage += ' Error: ' + error.message;
+//       }
+//       res.status(400).send(errorMessage);
 //     }
-//     res.status(400).send(errorMessage);
-//   }
+//   })();
 // });
+
 router.use('/:id', findByIdMiddleware, singleRouter);
 
 export default router;

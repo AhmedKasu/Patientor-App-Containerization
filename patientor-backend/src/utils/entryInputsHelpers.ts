@@ -5,7 +5,7 @@ import {
   HospitalEntry,
   OccupationalHealthcareEntry,
 } from '../types';
-import { parseDate, parseName } from './patientEntryHelpers';
+import { parseDate, parseName } from './patientInputsHelpers';
 import {
   isDate,
   isString,
@@ -131,7 +131,7 @@ export const isOccupationalHealthcareEntry = (
   );
 };
 
-type EntryFields = {
+export type EntryFields = {
   description: unknown;
   date: unknown;
   specialist: unknown;
@@ -148,7 +148,7 @@ type EntryFields = {
     endDate: unknown;
   };
 };
-const toNewEntry = ({
+const toNewEntryInputs = ({
   description,
   date,
   specialist,
@@ -159,8 +159,6 @@ const toNewEntry = ({
   employerName,
   sickLeave,
 }: EntryFields): Entry => {
-  console.log('toNewEntry', healthCheckRating);
-
   const newEntry = {
     description: parseLongTextInputs(description),
     date: parseDate(date),
@@ -180,17 +178,12 @@ const toNewEntry = ({
         ? parseSickLeave(sickLeave)
         : undefined,
   };
-  console.log('newentry', newEntry);
 
-  if (isHealthCheckEntry(newEntry)) {
-    return newEntry;
-  } else if (isHospitalEntry(newEntry)) {
-    return newEntry;
-  } else if (isOccupationalHealthcareEntry(newEntry)) {
-    return newEntry;
-  } else {
-    throw new Error('Incorrect or missing entry fields');
-  }
+  if (isHealthCheckEntry(newEntry)) return newEntry;
+  if (isHospitalEntry(newEntry)) return newEntry;
+  if (isOccupationalHealthcareEntry(newEntry)) return newEntry;
+
+  throw new Error('Incorrect or missing entry fields');
 };
 
-export default toNewEntry;
+export default toNewEntryInputs;
