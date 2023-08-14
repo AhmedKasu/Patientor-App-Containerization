@@ -2,7 +2,7 @@
 
 echo "Creating application user and db"
 
-mongosh <<EOF
+mongo <<EOF
 use the_database
 db.createUser({
   user: 'the_username',
