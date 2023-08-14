@@ -10,7 +10,7 @@ const hospitalEntrySchema = new mongoose.Schema<HospitalEntry>({
     date: { type: String, required: true },
     criteria: { type: String, required: true },
   },
-  diagnosisCodes: { type: Array, required: false },
+  diagnosisCodes: [{ type: String, required: false }],
   patient: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

@@ -7,7 +7,7 @@ const healthCheckEntrySchema = new mongoose.Schema<HealthCheckEntry>({
   type: { type: String, default: 'HealthCheck' },
   description: { type: String, required: true },
   healthCheckRating: { type: Number, required: true, min: 0, max: 3 },
-  diagnosisCodes: { type: Array, required: false },
+  diagnosisCodes: [{ type: String, required: false }],
   patient: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

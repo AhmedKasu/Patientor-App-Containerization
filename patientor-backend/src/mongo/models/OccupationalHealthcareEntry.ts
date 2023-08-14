@@ -12,7 +12,7 @@ const occupationalHealthcareEntrySchema =
       startDate: { type: String, required: false },
       endDate: { type: String, required: false },
     },
-    diagnosisCodes: { type: Array, required: false },
+    diagnosisCodes: [{ type: String, required: false }],
     patient: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
