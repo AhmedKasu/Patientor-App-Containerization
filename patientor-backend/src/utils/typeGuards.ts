@@ -1,4 +1,11 @@
-import { Gender, HealthCheckRating } from '../types';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  Gender,
+  HealthCheckEntry,
+  HealthCheckRating,
+  HospitalEntry,
+  OccupationalHealthcareEntry,
+} from '../types';
 import { ObjectId } from 'mongodb';
 
 export const isString = (text: unknown): text is string => {
@@ -9,7 +16,6 @@ export const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isGender = (param: any): param is Gender => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return Object.values(Gender).includes(param);
@@ -37,13 +43,11 @@ enum EntryType {
   Hospital = 'Hospital',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isEntryType = (type: any): type is EntryType => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return Object.values(EntryType).includes(type);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isHealthCheckRating = (param: any): param is HealthCheckRating => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return Object.values(HealthCheckRating).includes(param);
@@ -55,4 +59,30 @@ export const isValidRating = (param: unknown): boolean => {
 
 export const isMongoId = (id: unknown): id is string => {
   return typeof id === 'string' && ObjectId.isValid(id);
+};
+
+export const isHealthCheckEntry = (entry: any): entry is HealthCheckEntry => {
+  return (
+    entry.type === 'HealthCheck' && isHealthCheckRating(entry.healthCheckRating)
+  );
+};
+
+export const isHospitalEntry = (entry: any): entry is HospitalEntry => {
+  return (
+    entry.type === 'Hospital' &&
+    isDate(String(entry.discharge.date)) &&
+    isString(entry.discharge.criteria)
+  );
+};
+
+export const isOccupationalHealthcareEntry = (
+  entry: any
+): entry is OccupationalHealthcareEntry => {
+  return (
+    entry.type === 'OccupationalHealthcare' &&
+    isString(entry.employerName) &&
+    (entry.sickLeave === undefined ||
+      (isDate(String(entry.sickLeave.startDate)) &&
+        isDate(String(entry.sickLeave.endDate))))
+  );
 };

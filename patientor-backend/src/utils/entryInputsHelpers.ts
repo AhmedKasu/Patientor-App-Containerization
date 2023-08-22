@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Entry,
-  HealthCheckEntry,
-  HospitalEntry,
-  OccupationalHealthcareEntry,
-} from '../types';
 import { parseDate, parseName } from './patientInputsHelpers';
 import {
-  isDate,
   isString,
   isObject,
   objectHasKey,
@@ -105,32 +98,6 @@ const parseSickLeave = (sickLeave: unknown): SickLeave => {
   throw new Error('Incorrect or missing sick leave: ' + sickLeave);
 };
 
-const isHealthCheckEntry = (entry: any): entry is HealthCheckEntry => {
-  return (
-    entry.type === 'HealthCheck' && isHealthCheckRating(entry.healthCheckRating)
-  );
-};
-
-const isHospitalEntry = (entry: any): entry is HospitalEntry => {
-  return (
-    entry.type === 'Hospital' &&
-    isDate(String(entry.discharge.date)) &&
-    isString(entry.discharge.criteria)
-  );
-};
-
-export const isOccupationalHealthcareEntry = (
-  entry: any
-): entry is OccupationalHealthcareEntry => {
-  return (
-    entry.type === 'OccupationalHealthcare' &&
-    isString(entry.employerName) &&
-    (entry.sickLeave === undefined ||
-      (isDate(String(entry.sickLeave.startDate)) &&
-        isDate(String(entry.sickLeave.endDate))))
-  );
-};
-
 export type EntryFields = {
   description: unknown;
   date: unknown;
@@ -158,8 +125,8 @@ const toNewEntryInputs = ({
   discharge,
   employerName,
   sickLeave,
-}: EntryFields): Entry => {
-  const newEntry = {
+}: EntryFields): EntryFields => {
+  const parsedEntryInputs = {
     description: parseLongTextInputs(description),
     date: parseDate(date),
     specialist: parseSpecialist(specialist),
@@ -179,11 +146,7 @@ const toNewEntryInputs = ({
         : undefined,
   };
 
-  if (isHealthCheckEntry(newEntry)) return newEntry;
-  if (isHospitalEntry(newEntry)) return newEntry;
-  if (isOccupationalHealthcareEntry(newEntry)) return newEntry;
-
-  throw new Error('Incorrect or missing entry fields');
+  return parsedEntryInputs;
 };
 
 export default toNewEntryInputs;
