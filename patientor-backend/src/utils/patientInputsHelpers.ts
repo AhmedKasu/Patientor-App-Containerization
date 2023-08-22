@@ -1,4 +1,4 @@
-import { NewPatient, Gender } from '../types';
+import { NewPatient } from '../types';
 import { isString, isDate, isGender, isSsnFormat } from './typeGuards';
 
 export const parseName = (name: unknown): string => {
@@ -22,11 +22,11 @@ export const parseSSN = (ssn: unknown): string => {
   return ssn;
 };
 
-export const parseGender = (gender: unknown): Gender => {
+export const parseGender = (gender: unknown): string => {
   if (!gender || !isGender(gender)) {
     throw new Error('Incorrect or missing gender' + gender);
   }
-  return gender;
+  return gender.charAt(0).toUpperCase() + gender.slice(1);
 };
 
 export const parseOccupation = (occupation: unknown): string => {
