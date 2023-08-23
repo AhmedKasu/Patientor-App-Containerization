@@ -1,28 +1,61 @@
 import { NextFunction, Request, Response } from 'express';
 import { Patient } from '../mongo';
-import { isMongoId } from './typeGuards';
 import { PatientModelInterface } from 'src/mongo/models/Patient';
 export interface singleRouterReq extends Request {
   patient?: PatientModelInterface | null;
 }
 
-const findByIdMiddleware = (
+const asyncHandler = (
+  fn: (req: Request, res: Response, next: NextFunction) => Promise<void>
+) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+};
+
+const errorHandler = (
+  error: Error,
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  switch (error.name) {
+    case 'CastError':
+      res.status(400).send({ error: 'Malformatted Id' });
+      break;
+
+    case 'ValidationError':
+      res.status(400).send({ error: error.message });
+      break;
+
+    case 'NotFoundError':
+      res
+        .status(404)
+        .send({ error: error.message ? error.message : 'Resource not found' });
+      break;
+
+    default:
+      res.status(500).send({ error: 'An unexpected error occurred' }).end();
+      break;
+  }
+
+  next(error);
+  return;
+};
+
+const findByIdMiddleware = async (
   req: singleRouterReq,
   res: Response,
   next: NextFunction
 ) => {
-  void (async () => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    if (!isMongoId(id)) return res.sendStatus(400);
+  req.patient = await Patient.findById(id).populate('entries.entryId');
 
-    req.patient = await Patient.findById(id).populate('entries.entryId');
+  if (!req.patient) return res.sendStatus(404);
 
-    if (!req.patient) return res.sendStatus(404);
-
-    next();
-    return;
-  })();
+  next();
+  return;
 };
 
-export { findByIdMiddleware };
+export { asyncHandler, errorHandler, findByIdMiddleware };
