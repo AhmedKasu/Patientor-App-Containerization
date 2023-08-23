@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Patient } from '../mongo';
 import { PatientModelInterface } from 'src/mongo/models/Patient';
+import { NotFoundError } from './errors';
 export interface singleRouterReq extends Request {
   patient?: PatientModelInterface | null;
 }
@@ -45,14 +46,14 @@ const errorHandler = (
 
 const findByIdMiddleware = async (
   req: singleRouterReq,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
 
   req.patient = await Patient.findById(id).populate('entries.entryId');
 
-  if (!req.patient) return res.sendStatus(404);
+  if (!req.patient) throw new NotFoundError('Patient not found');
 
   next();
   return;
