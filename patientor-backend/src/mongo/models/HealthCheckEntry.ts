@@ -1,18 +1,15 @@
 import mongoose from 'mongoose';
-import { HealthCheckEntry } from 'src/types';
-
+import BaseEntrySchema, { BaseEntryInterface } from './BaseEntry';
+import transform_idToId from '../../utils/modelHelpers';
+interface HealthCheckEntry extends BaseEntryInterface {
+  healthCheckRating: number;
+}
 const healthCheckEntrySchema = new mongoose.Schema<HealthCheckEntry>({
-  date: { type: String, required: true },
-  specialist: { type: String, required: true },
+  ...BaseEntrySchema.obj,
   type: { type: String, default: 'HealthCheck' },
-  description: { type: String, required: true },
   healthCheckRating: { type: Number, required: true, min: 0, max: 3 },
-  diagnosisCodes: [{ type: String, required: false }],
-  patient: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Patient',
-  },
 });
 
-export default mongoose.model('HealthCheckEntry', healthCheckEntrySchema);
+transform_idToId(healthCheckEntrySchema);
+
+export default mongoose.model('HealthCheck', healthCheckEntrySchema);

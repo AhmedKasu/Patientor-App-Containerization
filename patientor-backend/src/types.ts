@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 
 export type Diagnosis = {
   code: string;
@@ -10,13 +10,11 @@ export enum Gender {
   Female = 'female',
   Other = 'other',
 }
-
 export interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
   diagnosisCodes?: Array<Diagnosis['code']>;
-  patient: mongoose.Types.ObjectId;
 }
 
 export enum HealthCheckRating {
@@ -25,12 +23,10 @@ export enum HealthCheckRating {
   'HighRisk' = 2,
   'CriticalRisk' = 3,
 }
-
 export interface HealthCheckEntry extends BaseEntry {
   type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
-
 export interface HospitalEntry extends BaseEntry {
   type: 'Hospital';
   discharge: {
@@ -38,7 +34,6 @@ export interface HospitalEntry extends BaseEntry {
     criteria: string;
   };
 }
-
 export interface OccupationalHealthcareEntry extends BaseEntry {
   type: 'OccupationalHealthcare';
   employerName: string;
@@ -48,13 +43,17 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   };
 }
 
-export type Entry =
+export type EntryTypes =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
+export interface Entry {
+  entryId: Types.ObjectId;
+  entryModel: Entry;
+}
+
 export type Patient = {
-  id: string;
   name: string;
   dateOfBirth: string;
   ssn: string;
@@ -62,6 +61,7 @@ export type Patient = {
   occupation: string;
   entries: Entry[];
 };
+
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type NewPatient = Omit<Patient, 'id' | 'entries'>;

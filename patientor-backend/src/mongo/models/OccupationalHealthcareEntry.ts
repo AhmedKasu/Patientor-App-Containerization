@@ -1,26 +1,28 @@
 import mongoose from 'mongoose';
-import { OccupationalHealthcareEntry } from 'src/types';
+import BaseEntrySchema, { BaseEntryInterface } from './BaseEntry';
+import transform_idToId from '../../utils/modelHelpers';
+interface OccupationalHealthcareEntry extends BaseEntryInterface {
+  employerName: string;
+  sickLeave?: {
+    startDate: string;
+    endDate: string;
+  };
+}
 
 const occupationalHealthcareEntrySchema =
   new mongoose.Schema<OccupationalHealthcareEntry>({
-    date: { type: String, required: true },
-    specialist: { type: String, required: true },
+    ...BaseEntrySchema.obj,
     type: { type: String, default: 'OccupationalHealthcare' },
-    description: { type: String, required: true },
     employerName: { type: String, required: true },
     sickLeave: {
       startDate: { type: String, required: false },
       endDate: { type: String, required: false },
     },
-    diagnosisCodes: [{ type: String, required: false }],
-    patient: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'Patient',
-    },
   });
 
+transform_idToId(occupationalHealthcareEntrySchema);
+
 export default mongoose.model(
-  'OccupationalHealthcareEntry',
+  'OccupationalHealthcare',
   occupationalHealthcareEntrySchema
 );

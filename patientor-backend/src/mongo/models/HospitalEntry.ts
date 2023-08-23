@@ -1,21 +1,21 @@
 import mongoose from 'mongoose';
-import { HospitalEntry } from 'src/types';
-
+import BaseEntrySchema, { BaseEntryInterface } from './BaseEntry';
+import transform_idToId from '../../utils/modelHelpers';
+interface HospitalEntry extends BaseEntryInterface {
+  discharge: {
+    date: string;
+    criteria: string;
+  };
+}
 const hospitalEntrySchema = new mongoose.Schema<HospitalEntry>({
-  date: { type: String, required: true },
-  specialist: { type: String, required: true },
+  ...BaseEntrySchema.obj,
   type: { type: String, default: 'Hospital' },
-  description: { type: String, required: true },
   discharge: {
     date: { type: String, required: true },
     criteria: { type: String, required: true },
   },
-  diagnosisCodes: [{ type: String, required: false }],
-  patient: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Patient',
-  },
 });
 
-export default mongoose.model('HospitalEntry', hospitalEntrySchema);
+transform_idToId(hospitalEntrySchema);
+
+export default mongoose.model('Hospital', hospitalEntrySchema);
