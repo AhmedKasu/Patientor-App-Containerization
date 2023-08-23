@@ -138,7 +138,7 @@ const toNewEntryInputs = ({
         ? parseDiagnosisCodes(diagnosisCodes)
         : undefined,
     type: parseEntryType(type),
-    healthCheckRating: isValidRating(healthCheckRating)
+    healthCheckRating: healthCheckRating
       ? parseHealthCheckRating(healthCheckRating)
       : undefined,
     discharge: discharge ? parseDischarge(discharge) : undefined,
