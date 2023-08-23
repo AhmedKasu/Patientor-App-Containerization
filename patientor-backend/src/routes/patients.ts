@@ -26,8 +26,10 @@ const router = Router();
 router.get(
   '/',
   asyncHandler(async (_req, res) => {
-    const patients = await Patient.find({});
-    res.send(patients);
+    const publicPatients = await Patient.find({})
+      .select('-ssn -entries')
+      .exec();
+    res.send(publicPatients);
   })
 );
 
