@@ -8,10 +8,11 @@ import {
   isHealthCheckRating,
   isValidRating,
 } from './typeGuards';
+import { ValidationError } from './errors';
 
 const parseLongTextInputs = (text: unknown): string => {
   if (!text || !isString(text) || text.length < 5) {
-    throw new Error(`Incorrect or missing: ${text}`);
+    throw new ValidationError(`Incorrect or missing: ${text}`);
   }
   return text;
 };
@@ -25,19 +26,21 @@ const parseDiagnosisCodes = (diagnosisCodes: unknown): string[] => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return diagnosisCodes;
   }
-  throw new Error('Incorrect diagnosis codes format: ' + diagnosisCodes);
+  throw new ValidationError(
+    'Incorrect diagnosis codes format: ' + diagnosisCodes
+  );
 };
 
 const parseSpecialist = (specialist: unknown): string => {
   if (!specialist || !isString(specialist) || specialist.length < 3) {
-    throw new Error('Incorrect or missing specialist: ' + specialist);
+    throw new ValidationError('Incorrect or missing specialist: ' + specialist);
   }
   return specialist;
 };
 
 const parseEntryType = (type: unknown): string => {
   if (!type || !isEntryType(type)) {
-    throw new Error('Incorrect or missing type: ' + type);
+    throw new ValidationError('Incorrect or missing type: ' + type);
   }
   return type;
 };
@@ -47,7 +50,7 @@ const parseHealthCheckRating = (healthCheckRating: unknown): number => {
     !isValidRating(healthCheckRating) ||
     !isHealthCheckRating(healthCheckRating)
   ) {
-    throw new Error(
+    throw new ValidationError(
       'Incorrect or missing health check rating: ' + healthCheckRating
     );
   }

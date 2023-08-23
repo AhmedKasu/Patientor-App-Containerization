@@ -1,37 +1,38 @@
 import { NewPatient } from '../types';
 import { isString, isDate, isGender, isSsnFormat } from './typeGuards';
+import { ValidationError } from './errors';
 
 export const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
-    throw new Error('Incorrect or missing name: ' + name);
+    throw new ValidationError('Incorrect or missing name: ' + name);
   }
   return name;
 };
 
 export const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
-    throw new Error('Incorrect or missing date: ' + date);
+    throw new ValidationError('Incorrect or missing date: ' + date);
   }
   return date;
 };
 
 export const parseSSN = (ssn: unknown): string => {
   if (!ssn || !isString(ssn) || !isSsnFormat(ssn)) {
-    throw new Error('Incorrect or missing ssn: ' + ssn);
+    throw new ValidationError('Incorrect or missing ssn: ' + ssn);
   }
   return ssn;
 };
 
 export const parseGender = (gender: unknown): string => {
   if (!gender || !isGender(gender)) {
-    throw new Error('Incorrect or missing gender' + gender);
+    throw new ValidationError('Incorrect or missing gender: ' + gender);
   }
   return gender.charAt(0).toUpperCase() + gender.slice(1);
 };
 
 export const parseOccupation = (occupation: unknown): string => {
   if (!occupation || !isString(occupation)) {
-    throw new Error('Incorrect or missing occupation: ' + occupation);
+    throw new ValidationError('Incorrect or missing occupation: ' + occupation);
   }
   return occupation;
 };
