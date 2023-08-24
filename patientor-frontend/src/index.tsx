@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { reducer, StateProvider } from "./state";
+import { PatientsProvider } from './context/patientsContext';
 
 ReactDOM.render(
-  <StateProvider reducer={reducer}>
+  <PatientsProvider>
     <App />
-  </StateProvider>,
+  </PatientsProvider>,
+
   document.getElementById('root')
 );
