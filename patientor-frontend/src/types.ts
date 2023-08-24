@@ -3,23 +3,25 @@ export interface Diagnosis {
   name: string;
   latin?: string;
 }
+export interface Diagnoses {
+  [code: string]: Diagnosis;
+}
 
 export enum Gender {
   Male = 'male',
   Female = 'female',
   Other = 'other',
 }
-
 export interface Patient {
   id: string;
   name: string;
   occupation: string;
   gender: Gender;
-  ssn?: string;
   dateOfBirth?: string;
-  entries?: Entry[];
 }
-
+export interface Patients {
+  [id: string]: Patient;
+}
 export interface BaseEntry {
   id: string;
   description: string;
@@ -34,6 +36,7 @@ export enum HealthCheckRating {
   'HighRisk' = 2,
   'CriticalRisk' = 3,
 }
+
 export enum EntryType {
   HealthCheck = 'HealthCheck',
   Hospital = 'Hospital',
@@ -72,7 +75,6 @@ export interface PatientInfo {
   dateOfBirth: string;
   entries: Entry[];
 }
-
 export interface EntryFormValues extends Omit<BaseEntry, 'id'> {
   type: EntryType;
   healthCheckRating: HealthCheckRating;
