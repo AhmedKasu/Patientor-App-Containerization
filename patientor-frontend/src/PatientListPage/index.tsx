@@ -1,5 +1,6 @@
 import React from 'react';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 import {
   Box,
   Table,
@@ -14,48 +15,20 @@ import {
 import { PatientFormValues } from '../AddPatientModal/AddPatientForm';
 import AddPatientModal from '../AddPatientModal';
 import { Patient } from '../types';
-import { apiBaseUrl } from '../constants';
 import HealthRatingBar from '../components/HealthRatingBar';
-import { useStateValue, addPatient } from '../state';
 
-import { Link } from 'react-router-dom';
-
+import { apiBaseUrl } from '../constants';
+import useNewPatient from '../hooks/useNewPatient';
 interface Props {
   patients: { [id: string]: Patient };
 }
+
 const PatientListPage = ({ patients }: Props) => {
-  const [, dispatch] = useStateValue();
+  const { addNewPatient, error, closeModal, openModal, isModalOpen } =
+    useNewPatient(apiBaseUrl);
 
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>();
-
-  const openModal = (): void => setModalOpen(true);
-
-  const closeModal = (): void => {
-    setModalOpen(false);
-    setError(undefined);
-  };
-
-  const submitNewPatient = async (values: PatientFormValues) => {
-    try {
-      const { data: newPatient } = await axios.post<Patient>(
-        `${apiBaseUrl}/patients`,
-        values
-      );
-      dispatch(addPatient(newPatient));
-      closeModal();
-    } catch (e: unknown) {
-      if (axios.isAxiosError(e)) {
-        console.error(e?.response?.data || 'Unrecognized axios error');
-        setError(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          String(e?.response?.data?.error) || 'Unrecognized axios error'
-        );
-      } else {
-        console.error('Unknown error', e);
-        setError('Unknown error');
-      }
-    }
+  const submitNewPatient = (values: PatientFormValues) => {
+    addNewPatient(values);
   };
 
   return (
@@ -90,7 +63,7 @@ const PatientListPage = ({ patients }: Props) => {
         </TableBody>
       </Table>
       <AddPatientModal
-        modalOpen={modalOpen}
+        modalOpen={isModalOpen}
         onSubmit={submitNewPatient}
         error={error}
         onClose={closeModal}
