@@ -1,8 +1,5 @@
 import React from 'react';
-import axios from 'axios';
-import { apiBaseUrl } from '../../constants';
 import { Entry, Diagnosis, EntryType } from '../../types';
-import { useStateValue, setDiagnoses } from '../../state';
 
 import HealthCheckEntry from './HealthCheckEntry';
 import HospitalEntry from './HospitalEntry';
@@ -15,24 +12,6 @@ interface Props {
 }
 
 const Entries = ({ entries, diagnoses }: Props) => {
-  const [, dispatch] = useStateValue();
-
-  React.useEffect(() => {
-    const getDiagnoses = async () => {
-      try {
-        const { data: diagnoses } = await axios.get<Diagnosis[]>(
-          `${apiBaseUrl}/diagnoses`
-        );
-
-        dispatch(setDiagnoses(diagnoses));
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    if (Object.keys(diagnoses).length === 0) void getDiagnoses();
-  }, [dispatch]);
-
   if (entries.length > 0) {
     return (
       <>

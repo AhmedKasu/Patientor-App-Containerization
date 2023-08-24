@@ -10,9 +10,8 @@ import {
   DiagnosisSelection,
 } from '../AddEntryModal/EntryFormField';
 import { EntryType, HealthCheckRating, EntryFormValues } from '../types';
-import { useStateValue } from '../state';
 import { FormError, validateEntryInputs } from '../utils/addEntryFormHelper';
-
+import useDiagnoses from '../hooks/useDiagnoses';
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
   onCancel: () => void;
@@ -32,7 +31,7 @@ const ratingOptions: RatingOption[] = [
 ];
 
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
-  const [{ diagnoses }] = useStateValue();
+  const { diagnoses } = useDiagnoses();
   return (
     <Formik
       initialValues={{
@@ -75,11 +74,13 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               name='specialist'
               component={TextField}
             />
-            <DiagnosisSelection
-              setFieldValue={setFieldValue}
-              setFieldTouched={setFieldTouched}
-              diagnoses={Object.values(diagnoses)}
-            />
+            {diagnoses && (
+              <DiagnosisSelection
+                setFieldValue={setFieldValue}
+                setFieldTouched={setFieldTouched}
+                diagnoses={Object.values(diagnoses)}
+              />
+            )}
             <SelectField label='Entry type' name='type' options={typeOptions} />
             {values.type === EntryType.HealthCheck && (
               <SelectField

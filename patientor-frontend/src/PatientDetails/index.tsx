@@ -1,9 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { apiBaseUrl } from '../constants';
-import { useStateValue, setPatientDetails, addEntry } from '../state';
-import { Entry, PatientInfo, EntryFormValues, Diagnosis } from '../types';
+
+import usePatientDetails from '../hooks/usePatientDetails';
+import useAddEntry from '../hooks/useAddEntry';
+import useDiagnoses from '../hooks/useDiagnoses';
+
+import { PatientInfo, EntryFormValues, Diagnoses } from '../types';
 
 import GenderIcons from '../components/GenderIcons';
 import Entries from './Entries';
@@ -13,15 +15,13 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { isFetched } from '../utils/patientDetailsHelper';
 
 import AddEntryModal from '../AddEntryModal';
-import { valuesToSubmit } from '../utils/addEntryFormHelper';
-
 interface Props {
   patient: PatientInfo;
-  diagnoses: { [code: string]: Diagnosis };
+  diagnoses: Diagnoses;
 }
+
 export const PatientDetails = ({ patient, diagnoses }: Props) => (
   <>
     <Card sx={{ minWidth: 275, marginTop: '2em' }}>
@@ -55,77 +55,30 @@ export const PatientDetails = ({ patient, diagnoses }: Props) => (
 );
 
 const PatientDetailsContainer = () => {
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>();
+  const [refetch, setRefetch] = React.useState<boolean>(false);
+
   const { id } = useParams<{ id: string }>();
-
   if (!id) return null;
-  const patient = patients[id];
 
-  React.useEffect(() => {
-    const getPatientDetails = async (id: string) => {
-      try {
-        const { data: patientDetails } = await axios.get<PatientInfo>(
-          `${apiBaseUrl}/patients/${id}`
-        );
-        dispatch(setPatientDetails(patientDetails));
-        console.log('patient details fetched');
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    if (patient && !isFetched(patient)) void getPatientDetails(id);
-  }, [id, patient, dispatch]);
+  const { addEntry, closeModal, error, isModalOpen, openModal } = useAddEntry(
+    id,
+    setRefetch
+  );
+  const { patientDetails } = usePatientDetails(id, refetch);
+  const { diagnoses } = useDiagnoses();
 
-  const openModal = (): void => setModalOpen(true);
-  const closeModal = (): void => {
-    setModalOpen(false);
-  };
-
-  const submitNewEntry = async (values: EntryFormValues) => {
-    const newValues = valuesToSubmit(values);
-    console.log('submitting new entry', newValues);
-
-    try {
-      const { data: newEntry } = await axios.post<Entry>(
-        `${apiBaseUrl}/patients/${id}/entries`,
-        newValues
-      );
-      const updatedEntries = patient.entries
-        ? patient.entries.concat(newEntry)
-        : [newEntry];
-      dispatch(addEntry(updatedEntries, id));
-      closeModal();
-    } catch (e: unknown) {
-      if (axios.isAxiosError(e)) {
-        console.error(e?.response?.data || 'Unrecognized axios error');
-        setError(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          String(e?.response?.data?.error) || 'Unrecognized axios error'
-        );
-      } else {
-        console.error('Unknown error', e);
-        setError('Unknown error');
-      }
-    }
-  };
-
-  if (
-    !patients ||
-    (Object.keys(patients).length === 0 && patients.constructor === Object) ||
-    !isFetched(patient)
-  )
-    return null;
+  const submitNewEntry = (values: EntryFormValues) => addEntry(values);
 
   return (
     <>
-      <PatientDetails diagnoses={diagnoses} patient={patient} />
+      {patientDetails && diagnoses && (
+        <PatientDetails diagnoses={diagnoses} patient={patientDetails} />
+      )}
 
       <Card sx={{ minWidth: 275, marginTop: '2em' }}>
         <CardActions>
           <AddEntryModal
-            modalOpen={modalOpen}
+            modalOpen={isModalOpen}
             onSubmit={submitNewEntry}
             onClose={closeModal}
             error={error}
