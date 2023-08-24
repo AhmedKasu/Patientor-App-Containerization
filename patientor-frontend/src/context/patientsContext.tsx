@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { Patients } from '../types';
 
 interface PatientsContextType {
   patients: Patients | null;
   setPatients: React.Dispatch<React.SetStateAction<Patients | null>>;
-  error: string | null;
-  setError: React.Dispatch<React.SetStateAction<string | null>>;
+  error: string | undefined;
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 export const PatientsContext = createContext<PatientsContextType | undefined>(
@@ -22,7 +22,7 @@ export const usePatientsContext = () => {
 
 export const PatientsProvider: React.FC = ({ children }) => {
   const [patients, setPatients] = useState<Patients | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   return (
     <PatientsContext.Provider
