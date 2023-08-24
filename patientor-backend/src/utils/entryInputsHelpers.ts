@@ -138,9 +138,10 @@ const toNewEntryInputs = ({
         ? parseDiagnosisCodes(diagnosisCodes)
         : undefined,
     type: parseEntryType(type),
-    healthCheckRating: healthCheckRating
-      ? parseHealthCheckRating(healthCheckRating)
-      : undefined,
+    healthCheckRating:
+      healthCheckRating || healthCheckRating === 0
+        ? parseHealthCheckRating(healthCheckRating)
+        : undefined,
     discharge: discharge ? parseDischarge(discharge) : undefined,
     employerName: employerName ? parseName(employerName) : undefined,
     sickLeave:
