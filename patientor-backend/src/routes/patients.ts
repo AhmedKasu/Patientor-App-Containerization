@@ -20,15 +20,15 @@ import {
   isHospitalEntry,
   isOccupationalHealthcareEntry,
 } from '../utils/typeGuards';
+import arrayToRecordByKey from '../utils/routesHelpers';
 
 const router = Router();
 
 router.get(
   '/',
   asyncHandler(async (_req, res) => {
-    const publicPatients = await Patient.find({})
-      .select('-ssn -entries')
-      .exec();
+    const patients = await Patient.find({}).select('-ssn -entries').exec();
+    const publicPatients = arrayToRecordByKey(patients, 'id');
     res.send(publicPatients);
   })
 );
