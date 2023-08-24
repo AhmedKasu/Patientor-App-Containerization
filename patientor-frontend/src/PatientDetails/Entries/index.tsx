@@ -6,6 +6,7 @@ import HospitalEntry from './HospitalEntry';
 import OccupationalHealthcareEntry from './OccupationalHealthcareEntry';
 
 import assertNever from '../../utils/exhaustiveTypeHelper';
+import { formatDate } from '../../utils/patientDetailsHelper';
 interface Props {
   entries: Entry[];
   diagnoses: { [code: string]: Diagnosis };
@@ -16,27 +17,40 @@ const Entries = ({ entries, diagnoses }: Props) => {
     return (
       <>
         {entries.map((entry) => {
-          switch (entry?.type) {
+          const formattedEntry = {
+            ...entry,
+            date: formatDate(entry.date),
+          };
+
+          switch (formattedEntry?.type) {
             case EntryType.HealthCheck:
-              return <HealthCheckEntry key={entry.id} entry={entry} />;
+              return (
+                <HealthCheckEntry
+                  key={formattedEntry.id}
+                  entry={formattedEntry}
+                />
+              );
+
             case EntryType.Hospital:
               return (
                 <HospitalEntry
-                  key={entry.id}
-                  entry={entry}
+                  key={formattedEntry.id}
+                  entry={formattedEntry}
                   diagnoses={diagnoses}
                 />
               );
+
             case EntryType.OccupationalHealthcare:
               return (
                 <OccupationalHealthcareEntry
-                  key={entry.id}
-                  entry={entry}
+                  key={formattedEntry.id}
+                  entry={formattedEntry}
                   diagnoses={diagnoses}
                 />
               );
+
             default:
-              return assertNever(entry);
+              return assertNever(formattedEntry);
           }
         })}
       </>
