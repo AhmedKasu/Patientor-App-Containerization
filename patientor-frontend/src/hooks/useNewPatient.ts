@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import axios from 'axios';
-import CanceledError from 'axios';
 
 import { usePatientsContext } from '../context/patientsContext';
 import { PatientFormValues } from '../AddPatientModal/AddPatientForm';
 import { Patient } from '../types';
+import handleAxiosError from '../utils/axiosErrorHandler';
 
 const useNewPatient = (apiBaseUrl: string) => {
   const [error, setError] = useState<string | undefined>(undefined);
@@ -27,16 +27,7 @@ const useNewPatient = (apiBaseUrl: string) => {
 
         closeModal();
       })
-      .catch((error: unknown) => {
-        if (error instanceof CanceledError) return;
-        if (axios.isAxiosError(error)) {
-          setError(
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            String(error.response?.data.error) ||
-              'Error from server with no message'
-          );
-        } else setError('Unknown error occurred');
-      });
+      .catch(handleAxiosError(setError));
   };
 
   return { addNewPatient, error, isModalOpen, openModal, closeModal };

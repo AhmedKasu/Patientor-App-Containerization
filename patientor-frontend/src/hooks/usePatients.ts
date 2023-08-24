@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import axios from 'axios';
-import CanceledError from 'axios';
+
 import { apiBaseUrl } from '../constants';
 import { Patients } from '../types';
 import { usePatientsContext } from '../context/patientsContext';
+import handleAxiosError from '../utils/axiosErrorHandler';
 
-const usePatients = (): [Patients | null, string | null] => {
+const usePatients = (): [Patients | null, string | undefined] => {
   const { error, patients, setPatients, setError } = usePatientsContext();
 
   useEffect(() => {
@@ -16,16 +17,7 @@ const usePatients = (): [Patients | null, string | null] => {
       .then((res) => {
         setPatients(res.data);
       })
-      .catch((error: unknown) => {
-        if (error instanceof CanceledError) return;
-        if (axios.isAxiosError(error)) {
-          setError(
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            String(error.response?.data.error) ||
-              'Error from server with no message'
-          );
-        } else setError('Unknown error occurred');
-      });
+      .catch(handleAxiosError(setError));
   }, [apiBaseUrl]);
 
   return [patients, error];

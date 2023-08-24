@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import axios from 'axios';
-import CanceledError from 'axios';
 
 import { apiBaseUrl } from '../constants';
 import { EntryFormValues, Entry } from '../types';
 import { valuesToSubmit } from '../utils/addEntryFormHelper';
+import handleAxiosError from '../utils/axiosErrorHandler';
 
 type SetRefetchFunction = React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -28,16 +28,7 @@ const useAddEntry = (id: string, setRefetch: SetRefetchFunction) => {
         setRefetch((prev) => !prev); // refetch patient details
         closeModal(); // Close the modal after successful posting
       })
-      .catch((error: unknown) => {
-        if (error instanceof CanceledError) return;
-        if (axios.isAxiosError(error)) {
-          setError(
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            String(error.response?.data.error) ||
-              'Error from server with no message'
-          );
-        } else setError('Unknown error occurred');
-      });
+      .catch(handleAxiosError(setError));
   };
 
   return {
