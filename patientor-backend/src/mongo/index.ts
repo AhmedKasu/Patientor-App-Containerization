@@ -3,6 +3,7 @@ import Patient from './models/Patient';
 import HospitalEntry from './models/HospitalEntry';
 import HealthCheckEntry from './models/HealthCheckEntry';
 import OccupationalHealthcareEntry from './models/OccupationalHealthcareEntry';
+import User from './models/User';
 import { MONGO_URL } from '../utils/config';
 
 if (MONGO_URL && !connection.readyState) {
@@ -22,4 +23,5 @@ export {
   HospitalEntry,
   HealthCheckEntry,
   OccupationalHealthcareEntry,
+  User,
 };
