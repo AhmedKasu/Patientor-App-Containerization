@@ -7,11 +7,8 @@ import {
 } from '../mongo';
 
 import asyncHandler from '../middleware/asycHandler';
-import {
-  errorHandler,
-  findByIdMiddleware,
-  singleRouterReq,
-} from '../utils/middleware';
+import errorHandler from '../middleware/errorHandler';
+import { findByIdMiddleware, singleRouterReq } from '../utils/middleware';
 import toNewPatientInputs from '../utils/patientInputsHelpers';
 import { NewPatient, PublicPatient } from '../types';
 import toNewEntryInputs, { EntryFields } from '../utils/entryInputsHelpers';

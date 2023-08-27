@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import Diagnosis from '../mongo/models/Diagnosis';
 import asyncHandler from '../middleware/asycHandler';
-import { errorHandler } from '../utils/middleware';
+import errorHandler from '../middleware/errorHandler';
 import arrayToRecordByKey from '../utils/routesHelpers';
 
 const router = Router();
