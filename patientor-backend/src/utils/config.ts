@@ -4,7 +4,8 @@ type Env = {
   MONGO_URL: string;
   REDIS_URL?: string;
   PORT?: number;
-  JWT_SECRET?: string;
+  JWT_SECRET: string;
+  NODE_ENV?: 'development' | 'production' | 'test';
 };
 
 const env: Env = load({
@@ -12,11 +13,17 @@ const env: Env = load({
   REDIS_URL: { type: String, optional: true },
   PORT: { type: Number, optional: true, default: 3001 },
   JWT_SECRET: String,
-});
+  NODE_ENV: {
+    type: ['production', 'test'],
+    optional: true,
+    default: 'development',
+  },
+}) as Env;
 
 const MONGO_URL = env.MONGO_URL;
 const REDIS_URL = env.REDIS_URL || undefined;
 const PORT = env.PORT;
 const JWT_SECRET = env.JWT_SECRET;
+const NODE_ENV = env.NODE_ENV;
 
-export { MONGO_URL, REDIS_URL, PORT, JWT_SECRET };
+export { JWT_SECRET, MONGO_URL, NODE_ENV, PORT, REDIS_URL };
