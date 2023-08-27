@@ -8,7 +8,7 @@ import {
 
 import asyncHandler from '../middleware/asycHandler';
 import errorHandler from '../middleware/errorHandler';
-import { findByIdMiddleware, singleRouterReq } from '../utils/middleware';
+import findByIdMiddleware, { singleRouterReq } from '..//middleware/findById';
 import toNewPatientInputs from '../utils/patientInputsHelpers';
 import { NewPatient, PublicPatient } from '../types';
 import toNewEntryInputs, { EntryFields } from '../utils/entryInputsHelpers';
