@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Joi from 'joi';
 import { User } from '../../types';
+import transform_idToId from '../../utils/modelHelpers';
 
 const userSchema = new mongoose.Schema<User>({
   name: { type: String, required: true, minlength: 5, maxlength: 50 },
@@ -28,5 +29,7 @@ export const validateUser = (user: User) => {
   });
   return schema.validate(user);
 };
+
+transform_idToId(userSchema);
 
 export default mongoose.model('User', userSchema);
