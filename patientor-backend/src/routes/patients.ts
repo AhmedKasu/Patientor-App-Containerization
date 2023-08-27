@@ -6,8 +6,8 @@ import {
   OccupationalHealthcareEntry,
 } from '../mongo';
 
+import asyncHandler from '../middleware/asycHandler';
 import {
-  asyncHandler,
   errorHandler,
   findByIdMiddleware,
   singleRouterReq,

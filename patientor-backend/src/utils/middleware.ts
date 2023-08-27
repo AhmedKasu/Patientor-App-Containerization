@@ -6,14 +6,6 @@ export interface singleRouterReq extends Request {
   patient?: PatientModelInterface | null;
 }
 
-const asyncHandler = (
-  fn: (req: Request, res: Response, next: NextFunction) => Promise<void>
-) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
-  };
-};
-
 const errorHandler = (
   error: Error,
   _req: Request,
@@ -59,4 +51,4 @@ const findByIdMiddleware = async (
   return;
 };
 
-export { asyncHandler, errorHandler, findByIdMiddleware };
+export { errorHandler, findByIdMiddleware };

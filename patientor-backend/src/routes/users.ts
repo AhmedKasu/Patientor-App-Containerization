@@ -4,7 +4,8 @@ import _ from 'lodash';
 
 import User, { validateUser } from '../mongo/models/User';
 
-import { asyncHandler, errorHandler } from '../utils/middleware';
+import asyncHandler from '../middleware/asycHandler';
+import { errorHandler } from '../utils/middleware';
 import { ValidationError } from '../utils/errors';
 import { User as UserInterface } from '../types';
 
