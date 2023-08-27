@@ -6,7 +6,7 @@ import OccupationalHealthcareEntry from './models/OccupationalHealthcareEntry';
 import User from './models/User';
 import { MONGO_URL } from '../utils/config';
 
-if (MONGO_URL && !connection.readyState) {
+if (!connection.readyState) {
   connect(MONGO_URL)
     .then(() => {
       console.log('connected to MongoDB');
@@ -14,8 +14,6 @@ if (MONGO_URL && !connection.readyState) {
     .catch((error) => {
       console.log('error connection to MongoDB:', error.message);
     });
-
-  if (!MONGO_URL) console.log('MONGO_URL not provided!!');
 }
 
 export {
