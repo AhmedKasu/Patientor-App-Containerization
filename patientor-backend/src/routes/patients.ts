@@ -9,6 +9,7 @@ import {
 import asyncHandler from '../middleware/asycHandler';
 import errorHandler from '../middleware/errorHandler';
 import findByIdMiddleware from '..//middleware/findById';
+import auth from '../middleware/auth';
 import toNewPatientInputs from '../utils/patientInputsHelpers';
 import { NewPatient, PublicPatient } from '../types';
 import toNewEntryInputs, { EntryFields } from '../utils/entryInputsHelpers';
@@ -38,6 +39,7 @@ singleRouter.get('/', (req: Request, res: Response) => {
 
 router.post(
   '/',
+  auth,
   asyncHandler(async (req, res) => {
     const patientInput = toNewPatientInputs(req.body as NewPatient);
     const newPatient: PublicPatient = await Patient.create(patientInput);
@@ -99,6 +101,7 @@ singleRouter.post(
 
 router.use(
   '/:id',
+  auth,
   asyncHandler(findByIdMiddleware),
   singleRouter,
   errorHandler
