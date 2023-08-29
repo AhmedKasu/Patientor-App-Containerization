@@ -1,5 +1,6 @@
 import express, { Request } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { PORT } from './utils/config';
 
 import diagnosesRouter from './routes/diagnoses';
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(cors<Request>());
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/api/ping', (_req, res) => {
   console.log('someone pinged here');
