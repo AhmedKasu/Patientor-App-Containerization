@@ -1,4 +1,4 @@
-import { Response, Router } from 'express';
+import { Response, Request, Router } from 'express';
 import {
   Patient,
   HealthCheckEntry,
@@ -8,7 +8,7 @@ import {
 
 import asyncHandler from '../middleware/asycHandler';
 import errorHandler from '../middleware/errorHandler';
-import findByIdMiddleware, { singleRouterReq } from '..//middleware/findById';
+import findByIdMiddleware from '..//middleware/findById';
 import toNewPatientInputs from '../utils/patientInputsHelpers';
 import { NewPatient, PublicPatient } from '../types';
 import toNewEntryInputs, { EntryFields } from '../utils/entryInputsHelpers';
@@ -32,7 +32,7 @@ router.get(
 
 const singleRouter = Router();
 
-singleRouter.get('/', (req: singleRouterReq, res: Response) => {
+singleRouter.get('/', (req: Request, res: Response) => {
   res.status(200).send(req.patient);
 });
 
@@ -47,7 +47,7 @@ router.post(
 
 singleRouter.post(
   '/entries',
-  asyncHandler(async (req: singleRouterReq, res) => {
+  asyncHandler(async (req: Request, res) => {
     const patient = req.patient;
 
     const entryInputs = toNewEntryInputs(req.body as EntryFields);
@@ -103,6 +103,7 @@ router.use(
   singleRouter,
   errorHandler
 );
+
 router.use(errorHandler);
 
 export default router;

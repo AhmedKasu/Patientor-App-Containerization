@@ -1,13 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import Patient, { PatientModelInterface } from '../mongo/models/Patient';
+import Patient from '../mongo/models/Patient';
 import { NotFoundError } from '../utils/errors';
 
-export interface singleRouterReq extends Request {
-  patient?: PatientModelInterface | null;
-}
-
 const findByIdMiddleware = async (
-  req: singleRouterReq,
+  req: Request,
   _res: Response,
   next: NextFunction
 ) => {
