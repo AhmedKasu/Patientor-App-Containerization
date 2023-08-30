@@ -6,6 +6,8 @@ import {
   OccupationalHealthcareEntry,
 } from '../mongo';
 
+import { setCache, getCache } from '../redis';
+
 import {
   asyncHandler,
   errorHandler,
@@ -27,8 +29,16 @@ const router = Router();
 router.get(
   '/',
   asyncHandler(async (_req, res) => {
-    const patients = await Patient.find({}).select('-ssn -entries').exec();
-    const publicPatients = arrayToRecordByKey(patients, 'id');
+    const cachedPatients = await getCache('patients');
+    if (cachedPatients) {
+      res.send(JSON.parse(cachedPatients));
+      return;
+    }
+
+    const dbPatients = await Patient.find({}).select('-ssn -entries').exec();
+    const publicPatients = arrayToRecordByKey(dbPatients, 'id');
+    await setCache('patients', JSON.stringify(publicPatients));
+
     res.send(publicPatients);
   })
 );
