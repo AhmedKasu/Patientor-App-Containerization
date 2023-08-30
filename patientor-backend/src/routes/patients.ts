@@ -7,6 +7,7 @@ import {
 } from '../mongo';
 
 import { setCache, getCache } from '../redis';
+import { cacheNewPatient } from '../redis/patients';
 
 import {
   asyncHandler,
@@ -15,7 +16,7 @@ import {
   singleRouterReq,
 } from '../utils/middleware';
 import toNewPatientInputs from '../utils/patientInputsHelpers';
-import { NewPatientInputs, PublicPatient } from '../types';
+import { NewPatientInputs } from '../types';
 import toNewEntryInputs, { EntryFields } from '../utils/entryInputsHelpers';
 import {
   isHealthCheckEntry,
@@ -53,8 +54,12 @@ router.post(
   '/',
   asyncHandler(async (req, res) => {
     const parsedInputs = toNewPatientInputs(req.body as NewPatientInputs);
-    const newPatient: PublicPatient = await Patient.create(parsedInputs);
-    res.status(200).send(newPatient);
+    const newPatient = await Patient.create(parsedInputs);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { ssn, entries, ...publicPatient } = newPatient.toJSON();
+
+    await cacheNewPatient(publicPatient);
+    res.status(200).send(publicPatient);
   })
 );
 

@@ -13,10 +13,7 @@ client.on('error', (err) => console.log('redis Client Error', err));
 
 const setCache = async (key: string, value: string) => {
   try {
-    await client.set(key, value, {
-      EX: 1200,
-      NX: true,
-    });
+    await client.setEx(key, 1200, value);
     return true;
   } catch (err) {
     console.error(`Error setting ${key} in Redis:`, err);
