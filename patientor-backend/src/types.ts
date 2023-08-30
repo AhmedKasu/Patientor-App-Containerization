@@ -65,4 +65,4 @@ export type Patient = {
 
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
-export type NewPatient = Omit<Patient, 'id' | 'entries'>;
+export type NewPatientInputs = Omit<Patient, 'id' | 'entries'>;

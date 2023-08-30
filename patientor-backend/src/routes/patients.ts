@@ -15,7 +15,7 @@ import {
   singleRouterReq,
 } from '../utils/middleware';
 import toNewPatientInputs from '../utils/patientInputsHelpers';
-import { NewPatient, PublicPatient } from '../types';
+import { NewPatientInputs, PublicPatient } from '../types';
 import toNewEntryInputs, { EntryFields } from '../utils/entryInputsHelpers';
 import {
   isHealthCheckEntry,
@@ -52,8 +52,8 @@ singleRouter.get('/', (req: singleRouterReq, res: Response) => {
 router.post(
   '/',
   asyncHandler(async (req, res) => {
-    const patientInput = toNewPatientInputs(req.body as NewPatient);
-    const newPatient: PublicPatient = await Patient.create(patientInput);
+    const parsedInputs = toNewPatientInputs(req.body as NewPatientInputs);
+    const newPatient: PublicPatient = await Patient.create(parsedInputs);
     res.status(200).send(newPatient);
   })
 );
