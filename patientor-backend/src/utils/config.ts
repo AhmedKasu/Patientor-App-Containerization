@@ -21,7 +21,7 @@ const env: Env = load({
 }) as Env;
 
 const MONGO_URL = env.MONGO_URL;
-const REDIS_URL = env.REDIS_URL || undefined;
+const REDIS_URL = env.REDIS_URL;
 const PORT = env.PORT;
 const JWT_SECRET = env.JWT_SECRET;
 const NODE_ENV = env.NODE_ENV;
