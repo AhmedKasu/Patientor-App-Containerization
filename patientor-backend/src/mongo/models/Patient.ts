@@ -7,6 +7,7 @@ interface EntryReference {
 }
 export interface PatientModelInterface extends Document {
   _id?: Types.ObjectId;
+  id: string;
   name: string;
   dateOfBirth: string;
   ssn: string;

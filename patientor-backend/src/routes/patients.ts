@@ -6,18 +6,22 @@ import {
   OccupationalHealthcareEntry,
 } from '../mongo';
 
+import { setCache, getCache } from '../redis';
+import { cacheNewPatient } from '../redis/patients';
+
 import asyncHandler from '../middleware/asycHandler';
 import errorHandler from '../middleware/errorHandler';
 import findByIdMiddleware from '..//middleware/findById';
 import auth from '../middleware/auth';
+
 import toNewPatientInputs from '../utils/patientInputsHelpers';
-import { NewPatient, PublicPatient } from '../types';
 import toNewEntryInputs, { EntryFields } from '../utils/entryInputsHelpers';
 import {
   isHealthCheckEntry,
   isHospitalEntry,
   isOccupationalHealthcareEntry,
 } from '../utils/typeGuards';
+import { NewPatientInputs } from '../types';
 import arrayToRecordByKey from '../utils/routesHelpers';
 
 const router = Router();
@@ -25,8 +29,16 @@ const router = Router();
 router.get(
   '/',
   asyncHandler(async (_req, res) => {
-    const patients = await Patient.find({}).select('-ssn -entries').exec();
-    const publicPatients = arrayToRecordByKey(patients, 'id');
+    const cachedPatients = await getCache('patients');
+    if (cachedPatients) {
+      res.send(JSON.parse(cachedPatients));
+      return;
+    }
+
+    const dbPatients = await Patient.find({}).select('-ssn -entries').exec();
+    const publicPatients = arrayToRecordByKey(dbPatients, 'id');
+    await setCache('patients', JSON.stringify(publicPatients));
+
     res.send(publicPatients);
   })
 );
@@ -41,9 +53,13 @@ router.post(
   '/',
   auth,
   asyncHandler(async (req, res) => {
-    const patientInput = toNewPatientInputs(req.body as NewPatient);
-    const newPatient: PublicPatient = await Patient.create(patientInput);
-    res.status(200).send(newPatient);
+    const parsedInputs = toNewPatientInputs(req.body as NewPatientInputs);
+    const newPatient = await Patient.create(parsedInputs);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { ssn, entries, ...publicPatient } = newPatient.toJSON();
+
+    await cacheNewPatient(publicPatient);
+    res.status(200).send(publicPatient);
   })
 );
 
