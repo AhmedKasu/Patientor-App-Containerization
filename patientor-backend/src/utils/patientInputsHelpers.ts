@@ -1,4 +1,4 @@
-import { NewPatient } from '../types';
+import { NewPatientInputs } from '../types';
 import { isString, isDate, isGender, isSsnFormat } from './typeGuards';
 import { ValidationError } from './errors';
 
@@ -50,8 +50,8 @@ const toNewPatientInputs = ({
   ssn,
   gender,
   occupation,
-}: patientInputs): NewPatient => {
-  const newEntry: NewPatient = {
+}: patientInputs): NewPatientInputs => {
+  const newEntry: NewPatientInputs = {
     name: parseName(name),
     dateOfBirth: parseDate(dateOfBirth),
     ssn: parseSSN(ssn),
