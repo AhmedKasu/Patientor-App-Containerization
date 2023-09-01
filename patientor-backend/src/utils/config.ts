@@ -1,7 +1,32 @@
-const MONGO_URL = process.env.MONGO_URL || undefined;
-const REDIS_URL = process.env.REDIS_URL || undefined;
+import { load } from 'ts-dotenv';
 
-export {
-  MONGO_URL, //: 'mongodb://the_username:the_password@localhost:3456/the_database',
-  REDIS_URL, //: '//localhost:6378'
+type Env = {
+  MONGO_URL: string;
+  REDIS_URL?: string;
+  REDIS_PASSWORD: string;
+  PORT?: number;
+  JWT_SECRET: string;
+  NODE_ENV?: 'development' | 'production' | 'test';
 };
+
+const env: Env = load({
+  MONGO_URL: String,
+  REDIS_URL: { type: String, optional: true },
+  REDIS_PASSWORD: String,
+  PORT: { type: Number, optional: true, default: 3001 },
+  JWT_SECRET: String,
+  NODE_ENV: {
+    type: ['production', 'test'],
+    optional: true,
+    default: 'development',
+  },
+}) as Env;
+
+const MONGO_URL = env.MONGO_URL;
+const REDIS_URL = env.REDIS_URL;
+const REDIS_PASSWORD = env.REDIS_PASSWORD;
+const PORT = env.PORT;
+const JWT_SECRET = env.JWT_SECRET;
+const NODE_ENV = env.NODE_ENV;
+
+export { JWT_SECRET, MONGO_URL, NODE_ENV, PORT, REDIS_PASSWORD, REDIS_URL };

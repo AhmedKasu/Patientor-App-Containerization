@@ -66,3 +66,8 @@ export type Patient = {
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type NewPatientInputs = Omit<Patient, 'id' | 'entries'>;
+export interface User {
+  name: string;
+  email: string;
+  password: string;
+}

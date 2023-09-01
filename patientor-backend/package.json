@@ -5,18 +5,30 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "ts-node-dev --files src/index.ts",
     "start": "node build/src/index.js",
     "lint": "eslint --ext .ts ."
   },
   "author": "Ahmed Kasu",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/lodash": "^4.14.197",
+    "@types/uuid": "^9.0.2",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.1",
+    "lodash": "^4.17.21",
     "mongoose": "^7.4.1",
+    "ts-dotenv": "^0.9.1",
     "redis": "^4.6.8",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
