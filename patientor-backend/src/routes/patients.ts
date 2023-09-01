@@ -1,4 +1,5 @@
 import { Response, Request, Router } from 'express';
+import _ from 'lodash';
 import {
   Patient,
   HealthCheckEntry,
@@ -37,8 +38,8 @@ router.get(
 
     const dbPatients = await Patient.find({}).select('-ssn -entries').exec();
     const publicPatients = arrayToRecordByKey(dbPatients, 'id');
-    await setCache('patients', JSON.stringify(publicPatients));
 
+    await setCache('patients', JSON.stringify(publicPatients));
     res.send(publicPatients);
   })
 );
@@ -55,8 +56,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const parsedInputs = toNewPatientInputs(req.body as NewPatientInputs);
     const newPatient = await Patient.create(parsedInputs);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { ssn, entries, ...publicPatient } = newPatient.toJSON();
+    const publicPatient = _.omit(newPatient.toJSON(), ['ssn', 'entries']);
 
     await cacheNewPatient(publicPatient);
     res.status(200).send(publicPatient);
