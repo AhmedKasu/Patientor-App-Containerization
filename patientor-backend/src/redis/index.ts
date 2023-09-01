@@ -1,5 +1,6 @@
 import { createClient } from 'redis';
 import { REDIS_PASSWORD, REDIS_URL } from '../utils/config';
+import { userSession } from '../utils/constants';
 
 const client = createClient({
   url: REDIS_URL,
@@ -14,7 +15,7 @@ client.on('error', (err) => console.log('redis Client Error', err));
 
 const setCache = async (key: string, value: string) => {
   try {
-    await client.setEx(key, 1200, value);
+    await client.setEx(key, userSession, value);
     return true;
   } catch (err) {
     console.error(`Error setting ${key} in Redis:`, err);

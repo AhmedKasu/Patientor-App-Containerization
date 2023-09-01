@@ -10,6 +10,7 @@ import errorHandler from '../middleware/errorHandler';
 import { ValidationError } from '../utils/errors';
 import { User as UserInterface } from '../types';
 import { JWT_SECRET, NODE_ENV } from '../utils/config';
+import { userSession } from '../utils/constants';
 
 const router = Router();
 type LoginInputs = Omit<UserInterface, 'name'>;
@@ -40,7 +41,7 @@ router.post(
       .cookie('accessToken', accessToken, {
         httpOnly: true,
         secure: NODE_ENV === 'production',
-        maxAge: 60 * 20,
+        maxAge: userSession,
       })
       .send({ csrfToken });
   })
