@@ -11,6 +11,7 @@ import { ValidationError } from '../utils/errors';
 import { User as UserInterface } from '../types';
 import { JWT_SECRET, NODE_ENV } from '../utils/config';
 import { userSession } from '../utils/constants';
+import { setCache } from '../redis';
 
 const router = Router();
 type LoginInputs = Omit<UserInterface, 'name'>;
@@ -36,6 +37,7 @@ router.post(
       expiresIn: '20m',
     });
     const csrfToken = uuidv4();
+    await setCache(user._id.toString(), csrfToken);
 
     res
       .cookie('accessToken', accessToken, {

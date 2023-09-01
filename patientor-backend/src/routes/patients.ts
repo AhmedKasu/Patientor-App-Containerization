@@ -52,6 +52,7 @@ singleRouter.get('/', (req: Request, res: Response) => {
 
 router.post(
   '/',
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   auth,
   asyncHandler(async (req, res) => {
     const parsedInputs = toNewPatientInputs(req.body as NewPatientInputs);
@@ -117,6 +118,7 @@ singleRouter.post(
 
 router.use(
   '/:id',
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   auth,
   asyncHandler(findByIdMiddleware),
   singleRouter,
