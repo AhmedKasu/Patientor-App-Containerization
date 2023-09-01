@@ -1,8 +1,9 @@
 import { createClient } from 'redis';
-import { REDIS_URL } from '../utils/config';
+import { REDIS_PASSWORD, REDIS_URL } from '../utils/config';
 
 const client = createClient({
   url: REDIS_URL,
+  password: REDIS_PASSWORD,
 });
 
 void (async () => {
