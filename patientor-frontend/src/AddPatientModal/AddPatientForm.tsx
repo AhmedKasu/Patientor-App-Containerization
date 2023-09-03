@@ -1,7 +1,6 @@
 import React from 'react';
-import { Field } from 'formik';
 
-import { TextField, SelectField, GenderOption } from './FormField';
+import { TextField, SelectField } from '../components/Forms/FormFields';
 import { AddPatientSchema } from '../utils/validation';
 import CustomForm from '../components/Forms';
 import { Gender, Patient } from '../types';
@@ -13,7 +12,7 @@ interface Props {
   onCancel: () => void;
 }
 
-const genderOptions: GenderOption[] = [
+const genderOptions = [
   { value: Gender.Male, label: 'Male' },
   { value: Gender.Female, label: 'Female' },
   { value: Gender.Other, label: 'Other' },
@@ -35,29 +34,21 @@ export const AddPatientForm = ({ onSubmit, onCancel }: Props) => {
       {() => {
         return (
           <>
-            <Field
-              label='Name'
-              placeholder='Name'
-              name='name'
-              component={TextField}
-            />
-            <Field
+            <TextField label='Name' placeholder='Name' name='name' />
+            <TextField
               label='Social Security Number'
               placeholder='SSN'
               name='ssn'
-              component={TextField}
             />
-            <Field
+            <TextField
               label='Date Of Birth'
               placeholder='YYYY-MM-DD'
               name='dateOfBirth'
-              component={TextField}
             />
-            <Field
+            <TextField
               label='Occupation'
               placeholder='Occupation'
               name='occupation'
-              component={TextField}
             />
             <SelectField label='Gender' name='gender' options={genderOptions} />
           </>
