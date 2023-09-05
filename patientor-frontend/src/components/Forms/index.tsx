@@ -14,7 +14,8 @@ interface CustomFormProps<Values> {
   children: (props: FormikProps<Values>) => ReactNode;
 }
 
-const CustomForm = <Values extends Record<string, unknown>>({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CustomForm = <Values extends Record<string, any>>({
   initialValues,
   validationSchema,
   onSubmit,
