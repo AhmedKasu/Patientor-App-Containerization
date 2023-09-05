@@ -10,7 +10,7 @@ import {
   DiagnosisSelection,
 } from '../AddEntryModal/EntryFormField';
 import { EntryType, HealthCheckRating, EntryFormValues } from '../types';
-import { FormError, validateEntryInputs } from '../utils/addEntryFormHelper';
+import NewEntrySchema from '../utils/validation/newEntry';
 import useDiagnoses from '../hooks/useDiagnoses';
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -52,7 +52,7 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         },
       }}
       onSubmit={onSubmit}
-      validate={(values): FormError => validateEntryInputs(values)}>
+      validationSchema={NewEntrySchema}>
       {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
         return (
           <Form className='form ui'>
