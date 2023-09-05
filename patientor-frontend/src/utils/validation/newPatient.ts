@@ -18,4 +18,4 @@ const AddPatientSchema = Yup.object().shape({
   occupation: Yup.string().min(3).max(40).required('Occupation is Required.'),
 });
 
-export { AddPatientSchema };
+export default AddPatientSchema;

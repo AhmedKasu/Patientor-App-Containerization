@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { TextField, SelectField } from '../components/Forms/FormFields';
-import { AddPatientSchema } from '../utils/validation';
+import AddPatientSchema from '../utils/validation/newPatient';
 import CustomForm from '../components/Forms';
 import { Gender, Patient } from '../types';
 
