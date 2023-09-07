@@ -99,7 +99,7 @@ const UserProfileIcon = ({
             Logout
           </MenuItem>
         ) : (
-          <>
+          <Box>
             <MenuItem onClick={handleLoginClick}>
               <ListItemIcon>
                 <Login fontSize='small' />
@@ -112,7 +112,7 @@ const UserProfileIcon = ({
               </ListItemIcon>
               Register
             </MenuItem>
-          </>
+          </Box>
         )}
       </Menu>
     </>
