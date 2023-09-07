@@ -1,29 +1,23 @@
 import React from 'react';
-import { Grid, Button } from '@material-ui/core';
-import { Field, Formik, Form } from 'formik';
 
-import {
-  TextField,
-  SelectField,
-  TypeOption,
-  RatingOption,
-  DiagnosisSelection,
-} from '../AddEntryModal/EntryFormField';
+import { DiagnosisSelection } from '../AddEntryModal/EntryFormField';
+import CustomForm from '../components/Forms';
+import { TextField, SelectField } from '../components/Forms/FormFields';
 import { EntryType, HealthCheckRating, EntryFormValues } from '../types';
-import { FormError, validateEntryInputs } from '../utils/addEntryFormHelper';
+import NewEntrySchema from '../utils/validation/newEntry';
 import useDiagnoses from '../hooks/useDiagnoses';
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
   onCancel: () => void;
 }
 
-const typeOptions: TypeOption[] = [
+const typeOptions = [
   { value: EntryType.HealthCheck, label: 'HealthCheck' },
   { value: EntryType.Hospital, label: 'Hospital' },
   { value: EntryType.OccupationalHealthcare, label: 'OccupationalHealthcare' },
 ];
 
-const ratingOptions: RatingOption[] = [
+const ratingOptions = [
   { value: HealthCheckRating.Healthy, label: 'Healthy' },
   { value: HealthCheckRating.LowRisk, label: 'LowRisk' },
   { value: HealthCheckRating.HighRisk, label: 'HighRisk' },
@@ -33,10 +27,10 @@ const ratingOptions: RatingOption[] = [
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const { diagnoses } = useDiagnoses();
   return (
-    <Formik
+    <CustomForm<EntryFormValues>
       initialValues={{
         description: '',
-        date: '',
+        date: new Date().toISOString().slice(0, 10),
         specialist: '',
         diagnosisCodes: [],
         healthCheckRating: 0,
@@ -52,27 +46,21 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         },
       }}
       onSubmit={onSubmit}
-      validate={(values): FormError => validateEntryInputs(values)}>
-      {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
+      validationSchema={NewEntrySchema}
+      onCancel={onCancel}>
+      {({ setFieldValue, setFieldTouched, values }) => {
         return (
-          <Form className='form ui'>
-            <Field
+          <>
+            <TextField
               label='Description'
               placeholder='Must be at least 5 characters'
               name='description'
-              component={TextField}
             />
-            <Field
-              label='Date'
-              placeholder='YYYY-MM-DD'
-              name='date'
-              component={TextField}
-            />
-            <Field
+            <TextField label='Date' placeholder='YYYY-MM-DD' name='date' />
+            <TextField
               label='Specialist'
               placeholder='Must have atleast 3 characters'
               name='specialist'
-              component={TextField}
             />
             {diagnoses && (
               <DiagnosisSelection
@@ -92,69 +80,41 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
 
             {values.type === EntryType.Hospital && (
               <>
-                <Field
+                <TextField
                   label='Discharge Date'
                   placeholder='YYYY-MM-DD'
                   name='discharge.date'
-                  component={TextField}
                 />
-                <Field
+                <TextField
                   label='Discharge Criteria'
                   placeholder='Must have atleast 5 characters'
                   name='discharge.criteria'
-                  component={TextField}
                 />
               </>
             )}
             {values.type === EntryType.OccupationalHealthcare && (
               <>
-                <Field
+                <TextField
                   label='Employer Name'
                   placeholder='Employer name'
                   name='employerName'
-                  component={TextField}
                 />
-                <Field
+                <TextField
                   label='Sick Leave Start Date'
                   placeholder='YYYY-MM-DD'
                   name='sickLeave.startDate'
-                  component={TextField}
                 />
-                <Field
+                <TextField
                   label='Sick Leave End Date'
                   placeholder='YYYY-MM-DD'
                   name='sickLeave.endDate'
-                  component={TextField}
                 />
               </>
             )}
-            <Grid>
-              <Grid item>
-                <Button
-                  color='secondary'
-                  variant='contained'
-                  style={{ float: 'left' }}
-                  type='button'
-                  onClick={onCancel}>
-                  Cancel
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  style={{
-                    float: 'right',
-                  }}
-                  type='submit'
-                  variant='contained'
-                  disabled={!dirty || !isValid}>
-                  Add
-                </Button>
-              </Grid>
-            </Grid>
-          </Form>
+          </>
         );
       }}
-    </Formik>
+    </CustomForm>
   );
 };
 
