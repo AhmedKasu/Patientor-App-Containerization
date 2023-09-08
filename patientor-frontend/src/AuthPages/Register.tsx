@@ -42,6 +42,7 @@ const RegisterUser = () => {
         <CustomForm
           initialValues={{ name: '', email: '', password: '' }}
           onSubmit={(values) => handleRegisterUser(values)}
+          submitButtonLabel='Register'
           onCancel={() => navigate('/')}
           validationSchema={AddUserSchema}>
           {() => {
