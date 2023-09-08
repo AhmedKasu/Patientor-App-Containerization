@@ -5,6 +5,7 @@ import { Container } from '@material-ui/core';
 import PatientListPage from './PatientListPage';
 import PatientDetails from './PatientDetails';
 import NavBar from './components/NavBar';
+import RegisterUser from './AuthPages/Register';
 
 import usePatients from './hooks/usePatients';
 
@@ -22,6 +23,7 @@ const App = () => {
               path='/'
               element={patients && <PatientListPage patients={patients} />}
             />
+            <Route path='/register' element={<RegisterUser />} />
           </Routes>
         </Container>
       </Router>
