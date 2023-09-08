@@ -9,7 +9,7 @@ import asyncHandler from '../middleware/asycHandler';
 import errorHandler from '../middleware/errorHandler';
 import { ValidationError } from '../utils/errors';
 import { User as UserInterface } from '../types';
-import { JWT_SECRET, NODE_ENV } from '../utils/config';
+import { JWT_SECRET } from '../utils/config';
 import { userSession } from '../utils/constants';
 import { setCache } from '../redis';
 
@@ -42,7 +42,6 @@ router.post(
     res
       .cookie('accessToken', accessToken, {
         httpOnly: true,
-        secure: NODE_ENV === 'production',
         maxAge: userSession,
       })
       .send({ csrfToken, user: user.name });
