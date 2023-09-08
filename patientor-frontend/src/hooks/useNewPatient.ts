@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import axios from 'axios';
 
+import api from '../config/api';
 import { usePatientsContext } from '../context/patientsContext';
 import { PatientFormValues } from '../AddPatientModal/AddPatientForm';
 import { Patient } from '../types';
 import handleAxiosError from '../utils/axiosErrorHandler';
 
-const useNewPatient = (apiBaseUrl: string) => {
+const useNewPatient = () => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,8 +15,8 @@ const useNewPatient = (apiBaseUrl: string) => {
   const { setPatients } = usePatientsContext();
 
   const addNewPatient = (patientData: PatientFormValues): void => {
-    axios
-      .post(`${apiBaseUrl}/patients`, patientData)
+    api
+      .post('/patients', patientData)
       .then((response) => {
         const newPatient = response.data as Patient;
 

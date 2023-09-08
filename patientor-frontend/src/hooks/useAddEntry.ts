@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
 
-import { apiBaseUrl } from '../constants';
+import api from '../config/api';
 import { EntryFormValues, Entry } from '../types';
 import { valuesToSubmit } from '../utils/addEntryFormHelper';
 import handleAxiosError from '../utils/axiosErrorHandler';
@@ -22,8 +21,8 @@ const useAddEntry = (id: string, setRefetch: SetRefetchFunction) => {
   const addEntry = (values: EntryFormValues) => {
     const newValues = valuesToSubmit(values);
 
-    axios
-      .post<Entry>(`${apiBaseUrl}/patients/${id}/entries`, newValues)
+    api
+      .post<Entry>(`/patients/${id}/entries`, newValues)
       .then(() => {
         setRefetch((prev) => !prev); // refetch patient details
         closeModal(); // Close the modal after successful posting

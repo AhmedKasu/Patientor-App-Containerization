@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
-import { apiBaseUrl } from '../constants';
+import api from '../config/api';
 import { User, RegistrationInput } from '../types';
 
 type Error = string | undefined;
@@ -22,8 +22,8 @@ const useAddUser = (): {
   const navigate = useNavigate();
 
   const addUser = (newUser: RegistrationInput): void => {
-    axios
-      .post<User>(`${apiBaseUrl}/users`, newUser)
+    api
+      .post<User>('/users', newUser)
       .then((res) => {
         setUser(res.data);
         setSuccessAlert(true);

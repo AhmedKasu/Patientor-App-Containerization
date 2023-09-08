@@ -1,6 +1,5 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { apiBaseUrl } from '../constants';
+import api from '../config/api';
 import { Diagnoses } from '../types';
 import handleAxiosError from '../utils/axiosErrorHandler';
 
@@ -9,8 +8,8 @@ const useDiagnoses = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    axios
-      .get<Diagnoses>(`${apiBaseUrl}/diagnoses`)
+    api
+      .get<Diagnoses>('/diagnoses')
       .then((response) => {
         setDiagnoses(response.data);
       })
