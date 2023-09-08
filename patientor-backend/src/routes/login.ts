@@ -45,7 +45,7 @@ router.post(
         secure: NODE_ENV === 'production',
         maxAge: userSession,
       })
-      .send({ csrfToken });
+      .send({ csrfToken, user: user.name });
   })
 );
 
