@@ -1,7 +1,7 @@
 import express, { Request } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { PORT } from './utils/config';
+import { PORT, NODE_ENV } from './utils/config';
 
 import diagnosesRouter from './routes/diagnoses';
 import patientsRouter from './routes/patients';
@@ -10,7 +10,15 @@ import login from './routes/login';
 
 const app = express();
 
-app.use(cors<Request>());
+app.use(
+  cors<Request>({
+    origin:
+      NODE_ENV === 'development'
+        ? 'http://localhost:3000'
+        : 'https://patientor.herokuapp.com',
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
