@@ -34,7 +34,7 @@ router.post(
     if (!validPassword) throw new ValidationError(errorMessage);
 
     const accessToken = jwt.sign({ id: user._id }, JWT_SECRET, {
-      expiresIn: '20m',
+      expiresIn: '1h',
     });
     const csrfToken = uuidv4();
     await setCache(user._id.toString(), csrfToken);
