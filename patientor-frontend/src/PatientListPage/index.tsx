@@ -17,7 +17,6 @@ import AddPatientModal from '../AddPatientModal';
 import { Patient } from '../types';
 import HealthRatingBar from '../components/HealthRatingBar';
 
-import { apiBaseUrl } from '../constants';
 import useNewPatient from '../hooks/useNewPatient';
 interface Props {
   patients: { [id: string]: Patient };
@@ -25,7 +24,7 @@ interface Props {
 
 const PatientListPage = ({ patients }: Props) => {
   const { addNewPatient, error, closeModal, openModal, isModalOpen } =
-    useNewPatient(apiBaseUrl);
+    useNewPatient();
 
   const submitNewPatient = (values: PatientFormValues) => {
     addNewPatient(values);
