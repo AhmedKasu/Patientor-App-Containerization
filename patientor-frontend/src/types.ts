@@ -28,6 +28,11 @@ export interface User {
 export interface RegistrationInput extends User {
   password: string;
 }
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
 export interface Patients {
   [id: string]: Patient;
 }
