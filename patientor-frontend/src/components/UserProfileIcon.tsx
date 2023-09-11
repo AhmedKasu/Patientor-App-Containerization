@@ -15,7 +15,7 @@ import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import UserAvatar from './UserAvatar';
 
 interface Props {
-  currentUser?: string;
+  currentUser: string | null;
   handleRegisterClick: () => void;
   handleLoginClick: () => void;
   handleLogoutClick: () => void;

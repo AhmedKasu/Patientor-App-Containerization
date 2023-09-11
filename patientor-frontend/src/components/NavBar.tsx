@@ -1,11 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Box from '@mui/system/Box';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 
+import { useAuthContext } from '../context/authContext';
+
+import UserProfileIcon from './UserProfileIcon';
+
 const NavBar = () => {
+  const { currentUser } = useAuthContext();
+
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -29,6 +37,12 @@ const NavBar = () => {
           Patientor
         </Typography>
       </Tooltip>
+      <UserProfileIcon
+        currentUser={currentUser}
+        handleRegisterClick={() => navigate('/register')}
+        handleLoginClick={() => navigate('/login')}
+        handleLogoutClick={() => console.log('logout')}
+      />
     </Box>
   );
 };
