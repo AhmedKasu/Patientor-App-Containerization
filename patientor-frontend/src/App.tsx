@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Container } from '@material-ui/core';
+import React, { useEffect, useMemo, useState } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import PatientListPage from './PatientListPage';
+import AppLayout from './Routing/AppLayout';
 import PatientDetails from './PatientDetails';
-import NavBar from './components/NavBar';
 import RegisterUser from './AuthPages/Register';
+import PrivateRoutes from './Routing/PrivateRoutes';
 import Login from './AuthPages/Login';
 
 import usePatients from './hooks/usePatients';
@@ -39,23 +39,31 @@ const App = () => {
     };
   }, [currentUser]);
 
+  const router = useMemo(() => {
+    return createBrowserRouter([
+      {
+        path: '/',
+        element: <AppLayout />,
+        children: [
+          {
+            index: true,
+            element: patients && <PatientListPage patients={patients} />,
+          },
+          { path: 'register', element: <RegisterUser /> },
+          { path: 'login', element: <Login /> },
+        ],
+      },
+      {
+        element: <PrivateRoutes />,
+        children: [{ path: 'patients/:id', element: <PatientDetails /> }],
+      },
+    ]);
+  }, [patients]);
+
   return (
-    <div className='App'>
-      <Router>
-        <Container>
-          <NavBar />
-          <Routes>
-            <Route path='/patients/:id' element={<PatientDetails />} />
-            <Route
-              path='/'
-              element={patients && <PatientListPage patients={patients} />}
-            />
-            <Route path='/register' element={<RegisterUser />} />
-            <Route path='/login' element={<Login />} />
-          </Routes>
-        </Container>
-      </Router>
-    </div>
+    <>
+      <RouterProvider router={router} />
+    </>
   );
 };
 
