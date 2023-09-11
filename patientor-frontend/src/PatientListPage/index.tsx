@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Box,
@@ -18,6 +18,7 @@ import { Patient } from '../types';
 import HealthRatingBar from '../components/HealthRatingBar';
 
 import useNewPatient from '../hooks/useNewPatient';
+import { useAuthContext } from '../context/authContext';
 interface Props {
   patients: { [id: string]: Patient };
 }
@@ -26,8 +27,19 @@ const PatientListPage = ({ patients }: Props) => {
   const { addNewPatient, error, closeModal, openModal, isModalOpen } =
     useNewPatient();
 
+  const { currentUser } = useAuthContext();
+  const navigate = useNavigate();
+
   const submitNewPatient = (values: PatientFormValues) => {
     addNewPatient(values);
+  };
+
+  const handleModalButton = () => {
+    if (currentUser) {
+      openModal();
+    } else {
+      navigate('/login');
+    }
   };
 
   return (
@@ -67,7 +79,7 @@ const PatientListPage = ({ patients }: Props) => {
         error={error}
         onClose={closeModal}
       />
-      <Button variant='contained' onClick={() => openModal()}>
+      <Button variant='contained' onClick={handleModalButton}>
         Add New Patient
       </Button>
     </div>
