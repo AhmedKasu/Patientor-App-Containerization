@@ -3,8 +3,6 @@ import React, { createContext, useContext, useState } from 'react';
 interface AuthContext {
   currentUser: string | null;
   setCurrentUser: React.Dispatch<React.SetStateAction<string | null>>;
-  accessToken: string | null;
-  setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
   csrfToken: string | null;
   setCsrfToken: React.Dispatch<React.SetStateAction<string | null>>;
   error: string | undefined;
@@ -23,7 +21,6 @@ export const useAuthContext = (): AuthContext => {
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<string | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -34,8 +31,6 @@ export const AuthProvider: React.FC = ({ children }) => {
         setCurrentUser,
         csrfToken,
         setCsrfToken,
-        accessToken,
-        setAccessToken,
         error,
         setError,
       }}>
