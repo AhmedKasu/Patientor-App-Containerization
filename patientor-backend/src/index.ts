@@ -7,6 +7,7 @@ import diagnosesRouter from './routes/diagnoses';
 import patientsRouter from './routes/patients';
 import userRouter from './routes/users';
 import login from './routes/login';
+import logout from './routes/logout';
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/diagnoses', diagnosesRouter);
 app.use('/api/patients', patientsRouter);
 app.use('/api/users', userRouter);
 app.use('/api/users/login', login);
+app.use('/api/users/logout', logout);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
