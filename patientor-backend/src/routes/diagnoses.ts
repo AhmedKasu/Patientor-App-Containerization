@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import Diagnosis from '../mongo/models/Diagnosis';
-import asyncHandler from '../middleware/asycHandler';
+import asyncHandler from '../middleware/asyncHandler';
 import errorHandler from '../middleware/errorHandler';
 import arrayToRecordByKey from '../utils/routesHelpers';
 

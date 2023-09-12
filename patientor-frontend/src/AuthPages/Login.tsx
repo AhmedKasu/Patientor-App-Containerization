@@ -25,7 +25,7 @@ const Login = () => {
       {successAlert && (
         <Alert severity='success'>
           <AlertTitle>Success</AlertTitle>
-          welcom <strong>{currentUser}</strong>
+          welcome <strong>{currentUser}</strong>
         </Alert>
       )}
 

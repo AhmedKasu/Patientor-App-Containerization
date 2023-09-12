@@ -5,7 +5,7 @@ import Joi from 'joi';
 import { v4 as uuidv4 } from 'uuid';
 
 import User from '../mongo/models/User';
-import asyncHandler from '../middleware/asycHandler';
+import asyncHandler from '../middleware/asyncHandler';
 import errorHandler from '../middleware/errorHandler';
 import { ValidationError } from '../utils/errors';
 import { User as UserInterface } from '../types';
