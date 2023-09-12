@@ -25,7 +25,9 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
   const stateChangingMethods = ['POST', 'PUT', 'DELETE'];
   const csrfToken = req.headers['x-csrf-token'];
 
-  if (stateChangingMethods.includes(req.method) && !csrfToken)
+  if (!stateChangingMethods.includes(req.method)) return next();
+
+  if (!csrfToken)
     return res.status(401).send('Access denied. csrfToken not provided.');
 
   try {
@@ -37,7 +39,6 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   next();
-  return;
 };
 
 export default auth;

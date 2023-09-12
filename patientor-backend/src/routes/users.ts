@@ -4,12 +4,25 @@ import _ from 'lodash';
 
 import User, { validateUser } from '../mongo/models/User';
 
-import asyncHandler from '../middleware/asycHandler';
+import asyncHandler from '../middleware/asyncHandler';
 import errorHandler from '../middleware/errorHandler';
+import auth from '../middleware/auth';
 import { ValidationError } from '../utils/errors';
 import { User as UserInterface } from '../types';
+import { getCache } from '../redis';
 
 const router = Router();
+
+router.get(
+  '/me',
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  auth,
+  asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user).select('-password');
+    const cachedCsrfToken = await getCache(user?.id as string);
+    res.send({ user, csrfToken: cachedCsrfToken });
+  })
+);
 
 router.post(
   '/',

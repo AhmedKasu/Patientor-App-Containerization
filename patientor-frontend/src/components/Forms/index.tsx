@@ -10,6 +10,7 @@ interface CustomFormProps<Values> {
     values: Values,
     formikHelpers: FormikHelpers<Values>
   ) => void | Promise<void>;
+  submitButtonLabel?: string;
   onCancel?: () => void;
   children: (props: FormikProps<Values>) => ReactNode;
 }
@@ -19,6 +20,7 @@ const CustomForm = <Values extends Record<string, any>>({
   initialValues,
   validationSchema,
   onSubmit,
+  submitButtonLabel,
   onCancel,
   children,
 }: CustomFormProps<Values>) => {
@@ -50,7 +52,7 @@ const CustomForm = <Values extends Record<string, any>>({
                 type='submit'
                 variant='contained'
                 disabled={!formikProps.dirty || !formikProps.isValid}>
-                Add
+                {submitButtonLabel || 'Add'}
               </Button>
             </Grid>
           </Grid>

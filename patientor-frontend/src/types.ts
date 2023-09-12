@@ -19,6 +19,20 @@ export interface Patient {
   gender: Gender;
   dateOfBirth?: string;
 }
+
+export interface User {
+  name: string;
+  email: string;
+}
+
+export interface RegistrationInput extends User {
+  password: string;
+}
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
 export interface Patients {
   [id: string]: Patient;
 }

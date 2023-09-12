@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 import { REDIS_PASSWORD, REDIS_URL } from '../utils/config';
-import { userSession } from '../utils/constants';
+import { cacheSession } from '../utils/constants';
 
 const client = createClient({
   url: REDIS_URL,
@@ -15,7 +15,7 @@ client.on('error', (err) => console.log('redis Client Error', err));
 
 const setCache = async (key: string, value: string) => {
   try {
-    await client.setEx(key, userSession, value);
+    await client.setEx(key, cacheSession, value);
     return true;
   } catch (err) {
     console.error(`Error setting ${key} in Redis:`, err);
@@ -33,4 +33,14 @@ const getCache = async (key: string) => {
   }
 };
 
-export { setCache, getCache };
+const deleteCache = async (key: string) => {
+  try {
+    await client.del(key);
+    return true;
+  } catch (err) {
+    console.error(`Error deliting ${key} from Redis:`, err);
+    return null;
+  }
+};
+
+export { setCache, getCache, deleteCache };

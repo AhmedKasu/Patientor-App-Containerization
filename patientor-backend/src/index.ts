@@ -1,16 +1,25 @@
 import express, { Request } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { PORT } from './utils/config';
+import { PORT, NODE_ENV } from './utils/config';
 
 import diagnosesRouter from './routes/diagnoses';
 import patientsRouter from './routes/patients';
 import userRouter from './routes/users';
 import login from './routes/login';
+import logout from './routes/logout';
 
 const app = express();
 
-app.use(cors<Request>());
+app.use(
+  cors<Request>({
+    origin:
+      NODE_ENV === 'development'
+        ? 'http://localhost:3000'
+        : 'https://patientor.herokuapp.com',
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -23,6 +32,7 @@ app.use('/api/diagnoses', diagnosesRouter);
 app.use('/api/patients', patientsRouter);
 app.use('/api/users', userRouter);
 app.use('/api/users/login', login);
+app.use('/api/users/logout', logout);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

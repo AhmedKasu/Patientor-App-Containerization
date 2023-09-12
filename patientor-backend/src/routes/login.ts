@@ -5,11 +5,11 @@ import Joi from 'joi';
 import { v4 as uuidv4 } from 'uuid';
 
 import User from '../mongo/models/User';
-import asyncHandler from '../middleware/asycHandler';
+import asyncHandler from '../middleware/asyncHandler';
 import errorHandler from '../middleware/errorHandler';
 import { ValidationError } from '../utils/errors';
 import { User as UserInterface } from '../types';
-import { JWT_SECRET, NODE_ENV } from '../utils/config';
+import { JWT_SECRET } from '../utils/config';
 import { userSession } from '../utils/constants';
 import { setCache } from '../redis';
 
@@ -34,7 +34,7 @@ router.post(
     if (!validPassword) throw new ValidationError(errorMessage);
 
     const accessToken = jwt.sign({ id: user._id }, JWT_SECRET, {
-      expiresIn: '20m',
+      expiresIn: '1h',
     });
     const csrfToken = uuidv4();
     await setCache(user._id.toString(), csrfToken);
@@ -42,10 +42,9 @@ router.post(
     res
       .cookie('accessToken', accessToken, {
         httpOnly: true,
-        secure: NODE_ENV === 'production',
         maxAge: userSession,
       })
-      .send({ csrfToken });
+      .send({ csrfToken, user: user.name });
   })
 );
 

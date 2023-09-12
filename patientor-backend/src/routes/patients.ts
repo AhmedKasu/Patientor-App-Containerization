@@ -10,7 +10,7 @@ import {
 import { setCache, getCache } from '../redis';
 import { cacheNewPatient } from '../redis/patients';
 
-import asyncHandler from '../middleware/asycHandler';
+import asyncHandler from '../middleware/asyncHandler';
 import errorHandler from '../middleware/errorHandler';
 import findByIdMiddleware from '..//middleware/findById';
 import auth from '../middleware/auth';

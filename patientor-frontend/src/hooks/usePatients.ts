@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import axios from 'axios';
 
-import { apiBaseUrl } from '../constants';
+import api from '../config/api';
 import { Patients } from '../types';
 import { usePatientsContext } from '../context/patientsContext';
 import handleAxiosError from '../utils/axiosErrorHandler';
@@ -10,15 +9,15 @@ const usePatients = (): [Patients | null, string | undefined] => {
   const { error, patients, setPatients, setError } = usePatientsContext();
 
   useEffect(() => {
-    void axios.get<void>(`${apiBaseUrl}/ping`);
+    void api.get<void>('/ping');
 
-    axios
-      .get<Patients>(`${apiBaseUrl}/patients`)
+    api
+      .get<Patients>('/patients')
       .then((res) => {
         setPatients(res.data);
       })
       .catch(handleAxiosError(setError));
-  }, [apiBaseUrl]);
+  }, []);
 
   return [patients, error];
 };

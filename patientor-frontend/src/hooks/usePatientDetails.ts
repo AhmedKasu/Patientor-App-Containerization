@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import { PatientInfo } from '../types';
-import { apiBaseUrl } from '../constants';
+import api from '../config/api';
 import handleAxiosError from '../utils/axiosErrorHandler';
 
 const usePatientDetails = (id: string, refetch: boolean) => {
@@ -12,8 +11,8 @@ const usePatientDetails = (id: string, refetch: boolean) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    axios
-      .get<PatientInfo>(`${apiBaseUrl}/patients/${id}`)
+    api
+      .get<PatientInfo>(`/patients/${id}`)
       .then((response) => {
         setPatientDetails(response.data);
       })
