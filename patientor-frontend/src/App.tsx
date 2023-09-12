@@ -7,6 +7,7 @@ import PatientDetails from './PatientDetails';
 import RegisterUser from './AuthPages/Register';
 import PrivateRoutes from './Routing/PrivateRoutes';
 import Login from './AuthPages/Login';
+import ErrorPage from './Routing/ErrorPage';
 
 import usePatients from './hooks/usePatients';
 import { useAuthContext } from './context/authContext';
@@ -44,6 +45,7 @@ const App = () => {
       {
         path: '/',
         element: <AppLayout />,
+        errorElement: <ErrorPage />,
         children: [
           {
             index: true,
