@@ -33,4 +33,14 @@ const getCache = async (key: string) => {
   }
 };
 
-export { setCache, getCache };
+const deleteCache = async (key: string) => {
+  try {
+    await client.del(key);
+    return true;
+  } catch (err) {
+    console.error(`Error deliting ${key} from Redis:`, err);
+    return null;
+  }
+};
+
+export { setCache, getCache, deleteCache };
