@@ -9,11 +9,11 @@ import {
   Gender,
   HospitalEntry,
   OccupationalHealthcareEntry,
-  PatientInfo,
+  Patient,
 } from '../types';
 
 describe('<PatientDetails />', () => {
-  const patient: PatientInfo = {
+  const patient: Patient = {
     id: 'd2773336-f723-11e9-8f0b-362b9e111227',
     name: 'Mason Mount',
     dateOfBirth: '1988-07-09',
@@ -56,7 +56,7 @@ describe('<PatientDetails />', () => {
   });
 
   test('a female icon is rendered when a patient is female', () => {
-    const femalePatient: PatientInfo = { ...patient, gender: Gender.Female };
+    const femalePatient: Patient = { ...patient, gender: Gender.Female };
 
     render(<PatientDetails diagnoses={diagnoses} patient={femalePatient} />);
     expect(screen.getByTestId('FemaleIcon')).toBeDefined();
@@ -64,7 +64,7 @@ describe('<PatientDetails />', () => {
 
   describe('<Entries />, renders the right content depending on the type of entry & diagnosis code', () => {
     test('Hospital entry', () => {
-      const hospitalEntryPatient: PatientInfo = {
+      const hospitalEntryPatient: Patient = {
         ...patient,
         entries: [
           {
@@ -101,7 +101,7 @@ describe('<PatientDetails />', () => {
     });
 
     test('Occupational Healthcare entry', () => {
-      const occupationalHealthcareEntryPatient: PatientInfo = {
+      const occupationalHealthcareEntryPatient: Patient = {
         ...patient,
         entries: [
           {
@@ -149,7 +149,7 @@ describe('<PatientDetails />', () => {
     });
 
     test('Health Check entry', () => {
-      const healthCheckEntryPatient: PatientInfo = {
+      const healthCheckEntryPatient: Patient = {
         ...patient,
         entries: [
           {

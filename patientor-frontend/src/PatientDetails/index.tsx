@@ -5,7 +5,7 @@ import usePatientDetails from '../hooks/usePatientDetails';
 import useAddEntry from '../hooks/useAddEntry';
 import useDiagnoses from '../hooks/useDiagnoses';
 
-import { PatientInfo, EntryFormValues, Diagnoses } from '../types';
+import { Patient, EntryFormValues, Diagnoses } from '../types';
 
 import GenderIcons from '../components/GenderIcons';
 import Entries from './Entries';
@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 
 import AddEntryModal from '../AddEntryModal';
 interface Props {
-  patient: PatientInfo;
+  patient: Patient;
   diagnoses: Diagnoses;
 }
 

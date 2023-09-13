@@ -3,6 +3,7 @@ export interface Diagnosis {
   name: string;
   latin?: string;
 }
+
 export interface Diagnoses {
   [code: string]: Diagnosis;
 }
@@ -12,12 +13,25 @@ export enum Gender {
   Female = 'female',
   Other = 'other',
 }
+
 export interface Patient {
   id: string;
   name: string;
   occupation: string;
   gender: Gender;
   dateOfBirth?: string;
+  ssn: string;
+  entries: Entry[];
+}
+
+export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
+
+export interface Patients {
+  [id: string]: Patient;
+}
+
+export interface PublicPatients {
+  [id: string]: PublicPatient;
 }
 
 export interface User {
@@ -33,9 +47,7 @@ export interface LoginInput {
   email: string;
   password: string;
 }
-export interface Patients {
-  [id: string]: Patient;
-}
+
 export interface BaseEntry {
   id: string;
   description: string;
@@ -56,10 +68,12 @@ export enum EntryType {
   Hospital = 'Hospital',
   OccupationalHealthcare = 'OccupationalHealthcare',
 }
+
 export interface HealthCheckEntry extends BaseEntry {
   type: EntryType.HealthCheck;
   healthCheckRating: HealthCheckRating;
 }
+
 export interface HospitalEntry extends BaseEntry {
   type: EntryType.Hospital;
   discharge: {
@@ -67,6 +81,7 @@ export interface HospitalEntry extends BaseEntry {
     criteria: string;
   };
 }
+
 export interface OccupationalHealthcareEntry extends BaseEntry {
   type: EntryType.OccupationalHealthcare;
   employerName: string;
@@ -80,15 +95,7 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
-export interface PatientInfo {
-  id: string;
-  name: string;
-  occupation: string;
-  gender: Gender;
-  ssn: string;
-  dateOfBirth: string;
-  entries: Entry[];
-}
+
 export interface EntryFormValues extends Omit<BaseEntry, 'id'> {
   type: EntryType;
   healthCheckRating: HealthCheckRating;

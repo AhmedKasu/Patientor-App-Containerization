@@ -17,6 +17,7 @@ describe('<PatientListPage />', () => {
       ssn: '090788-122X',
       gender: Gender.Male,
       occupation: 'Football Player',
+      entries: [],
     },
     'e32114445-f711-11e9-8f0b-362b9e133367': {
       id: 'e32114445-f711-11e9-8f0b-362b9e133367',
@@ -25,6 +26,7 @@ describe('<PatientListPage />', () => {
       ssn: '090779-462X',
       gender: Gender.Female,
       occupation: 'Artist',
+      entries: [],
     },
   };
 
