@@ -9,8 +9,6 @@ const usePatients = (): [Patients | null, string | undefined] => {
   const { error, patients, setPatients, setError } = usePatientsContext();
 
   useEffect(() => {
-    void api.get<void>('/ping');
-
     api
       .get<Patients>('/patients')
       .then((res) => {
