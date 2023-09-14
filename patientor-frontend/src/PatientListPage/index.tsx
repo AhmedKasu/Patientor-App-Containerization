@@ -16,26 +16,23 @@ import _ from 'lodash';
 
 import { PatientFormValues } from '../AddPatientModal/AddPatientForm';
 import AddPatientModal from '../AddPatientModal';
-import { Patient, PublicPatient } from '../types';
+import { Patient, Patients, PublicPatient, PublicPatients } from '../types';
 import HealthRatingBar from '../components/HealthRatingBar';
 import { getLatestHealthCheckRating } from '../utils/patientDetailsHelper';
 
 import useNewPatient from '../hooks/useNewPatient';
 import { useAuthContext } from '../context/authContext';
-
-const isPatient = (patient: Patient | PublicPatient): patient is Patient => {
-  return (patient as Patient).ssn !== undefined;
-};
+import usePatients from '../hooks/usePatients';
 
 interface Props {
-  patients: { [id: string]: Patient } | { [id: string]: PublicPatient };
+  patients: Patients | PublicPatients | null;
+  currentUser: string | null;
 }
 
-const PatientListPage = ({ patients }: Props) => {
+export const PatientListPage = ({ patients, currentUser }: Props) => {
   const { addNewPatient, error, closeModal, openModal, isModalOpen } =
     useNewPatient();
 
-  const { currentUser } = useAuthContext();
   const navigate = useNavigate();
 
   const submitNewPatient = (values: PatientFormValues) => {
@@ -101,4 +98,18 @@ const PatientListPage = ({ patients }: Props) => {
   );
 };
 
-export default PatientListPage;
+const isPatient = (patient: Patient | PublicPatient): patient is Patient => {
+  return (patient as Patient).ssn !== undefined;
+};
+
+const PatientListPageContainer = () => {
+  const [patients] = usePatients();
+  const { currentUser } = useAuthContext();
+  return (
+    <>
+      <PatientListPage patients={patients} currentUser={currentUser} />
+    </>
+  );
+};
+
+export default PatientListPageContainer;
