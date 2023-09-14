@@ -12,15 +12,23 @@ import {
   TableBody,
 } from '@material-ui/core';
 
+import _ from 'lodash';
+
 import { PatientFormValues } from '../AddPatientModal/AddPatientForm';
 import AddPatientModal from '../AddPatientModal';
-import { Patient } from '../types';
+import { Patient, PublicPatient } from '../types';
 import HealthRatingBar from '../components/HealthRatingBar';
+import { getLatestHealthCheckRating } from '../utils/patientDetailsHelper';
 
 import useNewPatient from '../hooks/useNewPatient';
 import { useAuthContext } from '../context/authContext';
+
+const isPatient = (patient: Patient | PublicPatient): patient is Patient => {
+  return (patient as Patient).ssn !== undefined;
+};
+
 interface Props {
-  patients: { [id: string]: Patient };
+  patients: { [id: string]: Patient } | { [id: string]: PublicPatient };
 }
 
 const PatientListPage = ({ patients }: Props) => {
@@ -59,7 +67,7 @@ const PatientListPage = ({ patients }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.values(patients).map((patient: Patient) => (
+          {_.map(patients, (patient: Patient | PublicPatient) => (
             <TableRow key={patient.id}>
               <TableCell>
                 <Link to={`/patients/${patient.id}`}>{patient.name}</Link>
@@ -67,7 +75,14 @@ const PatientListPage = ({ patients }: Props) => {
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
-                <HealthRatingBar showText={false} rating={1} />
+                <HealthRatingBar
+                  showText={currentUser ? true : false}
+                  rating={
+                    currentUser && isPatient(patient)
+                      ? getLatestHealthCheckRating(patient)
+                      : 10
+                  }
+                />
               </TableCell>
             </TableRow>
           ))}
