@@ -1,5 +1,7 @@
 import { Response, Request, Router } from 'express';
 import _ from 'lodash';
+import { verify, JwtPayload } from 'jsonwebtoken';
+
 import {
   Patient,
   HealthCheckEntry,
@@ -24,23 +26,46 @@ import {
 } from '../utils/typeGuards';
 import { NewPatientInputs } from '../types';
 import arrayToRecordByKey from '../utils/routesHelpers';
+import { JWT_SECRET } from '../utils/config';
 
 const router = Router();
 
 router.get(
   '/',
-  asyncHandler(async (_req, res) => {
+  asyncHandler(async (req, res) => {
+    const accessToken = req.cookies?.accessToken;
+    const dbPatients = await Patient.find({}).populate('entries.entryId');
+    const recordByIdPatients = arrayToRecordByKey(dbPatients, 'id');
+    let isAuthenticated = false;
+
+    if (accessToken) {
+      try {
+        verify(accessToken, JWT_SECRET) as JwtPayload;
+        isAuthenticated = true;
+      } catch (err) {
+        isAuthenticated = false;
+      }
+    }
+
     const cachedPatients = await getCache('patients');
     if (cachedPatients) {
       res.send(JSON.parse(cachedPatients));
       return;
     }
 
-    const dbPatients = await Patient.find({}).select('-ssn -entries').exec();
-    const publicPatients = arrayToRecordByKey(dbPatients, 'id');
+    const publicPatients = _.mapValues(recordByIdPatients, (patient) =>
+      _.omit(patient.toJSON(), ['ssn', 'entries'])
+    );
 
-    await setCache('patients', JSON.stringify(publicPatients));
-    res.send(publicPatients);
+    if (!isAuthenticated) {
+      await setCache('patients', JSON.stringify(publicPatients));
+      res.send(publicPatients);
+    }
+
+    if (isAuthenticated) {
+      await setCache('patients', JSON.stringify(dbPatients));
+      res.send(dbPatients);
+    }
   })
 );
 
