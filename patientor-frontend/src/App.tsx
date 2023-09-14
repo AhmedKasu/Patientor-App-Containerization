@@ -1,20 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { RouterProvider } from 'react-router-dom';
 
-import PatientListPage from './PatientListPage';
-import AppLayout from './Routing/AppLayout';
-import PatientDetails from './PatientDetails';
-import RegisterUser from './AuthPages/Register';
-import PrivateRoutes from './Routing/PrivateRoutes';
-import Login from './AuthPages/Login';
-import ErrorPage from './Routing/ErrorPage';
-
-import usePatients from './hooks/usePatients';
 import { useAuthContext } from './context/authContext';
 import useRefreshUserSession from './hooks/useRefreshUserSession';
 
+import router from './Routing/Routes';
+
 const App = () => {
-  const [patients] = usePatients();
   const { currentUser } = useAuthContext();
   const [intervalId, setIntervalId] = useState<number | null>(null);
   const { refreshUserSession } = useRefreshUserSession();
@@ -39,28 +31,6 @@ const App = () => {
       }
     };
   }, [currentUser]);
-
-  const router = useMemo(() => {
-    return createBrowserRouter([
-      {
-        path: '/',
-        element: <AppLayout />,
-        errorElement: <ErrorPage />,
-        children: [
-          {
-            index: true,
-            element: patients && <PatientListPage patients={patients} />,
-          },
-          { path: 'register', element: <RegisterUser /> },
-          { path: 'login', element: <Login /> },
-        ],
-      },
-      {
-        element: <PrivateRoutes />,
-        children: [{ path: 'patients/:id', element: <PatientDetails /> }],
-      },
-    ]);
-  }, [patients]);
 
   return (
     <>
