@@ -11,7 +11,7 @@ import { ValidationError } from '../utils/errors';
 import { User as UserInterface } from '../types';
 import { JWT_SECRET } from '../utils/config';
 import { userSession } from '../utils/constants';
-import { setCache } from '../redis';
+import { deleteCache, setCache } from '../redis';
 
 const router = Router();
 type LoginInputs = Omit<UserInterface, 'name'>;
@@ -39,6 +39,7 @@ router.post(
     const csrfToken = uuidv4();
     await setCache(user._id.toString(), csrfToken);
 
+    await deleteCache('patients');
     res
       .cookie('accessToken', accessToken, {
         httpOnly: true,

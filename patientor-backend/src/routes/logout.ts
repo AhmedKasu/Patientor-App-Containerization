@@ -12,6 +12,7 @@ router.post(
   asyncHandler(async (req, res) => {
     res.clearCookie('accessToken');
     await deleteCache(req.user as string);
+    await deleteCache('patients');
     res.status(204).end();
   })
 );
