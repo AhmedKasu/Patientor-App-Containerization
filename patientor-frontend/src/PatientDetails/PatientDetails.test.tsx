@@ -1,5 +1,5 @@
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import { PatientDetails } from '.';
@@ -49,19 +49,22 @@ describe('<PatientDetails />', () => {
   test('renders patient details', () => {
     render(<PatientDetails diagnoses={diagnoses} patient={patient} />);
 
-    expect(screen.getByText(patient.name)).toBeDefined();
-    expect(screen.getByText(`ssn: ${patient.ssn}`)).toBeDefined();
-    expect(screen.getByText(`occupation: ${patient.occupation}`)).toBeDefined();
-    expect(screen.getByText('Entries')).toBeDefined();
-    expect(screen.getByText('No available entries')).toBeDefined();
-    expect(screen.getByTestId('MaleIcon')).toBeDefined();
+    expect(screen.getByText(patient.name)).toBeInTheDocument();
+    expect(screen.getByText(`ssn: ${patient.ssn}`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`occupation: ${patient.occupation}`)
+    ).toBeInTheDocument();
+    expect(screen.getByText('Entries')).toBeInTheDocument();
+    expect(screen.getByText('No available entries')).toBeInTheDocument();
+    expect(screen.getByTestId('MaleIcon')).toBeInTheDocument();
   });
 
   test('a female icon is rendered when a patient is female', () => {
     const femalePatient: Patient = { ...patient, gender: Gender.Female };
 
     render(<PatientDetails diagnoses={diagnoses} patient={femalePatient} />);
-    expect(screen.getByTestId('FemaleIcon')).toBeDefined();
+
+    expect(screen.getByTestId('FemaleIcon')).toBeInTheDocument();
   });
 
   describe('<Entries />, renders the right content depending on the type of entry & diagnosis code', () => {
@@ -90,16 +93,20 @@ describe('<PatientDetails />', () => {
       const entry: HospitalEntry = hospitalEntryPatient
         .entries[0] as HospitalEntry;
 
-      expect(screen.getByText(formatDate(entry.date))).toBeDefined();
-      expect(screen.getByText(`${entry.description}`)).toBeDefined();
-      expect(screen.getByText(`diagnose by ${entry.specialist}`)).toBeDefined();
-      expect(screen.getByText('Discharge')).toBeDefined();
-      expect(screen.getByText(`Date: ${entry.discharge.date}`)).toBeDefined();
-      expect(screen.getByText('Diagnoses')).toBeDefined();
-      expect(screen.getByText('Disorder of ligament')).toBeDefined();
+      expect(screen.getByText(formatDate(entry.date))).toBeInTheDocument();
+      expect(screen.getByText(`${entry.description}`)).toBeInTheDocument();
+      expect(
+        screen.getByText(`diagnose by ${entry.specialist}`)
+      ).toBeInTheDocument();
+      expect(screen.getByText('Discharge')).toBeInTheDocument();
+      expect(
+        screen.getByText(`Date: ${entry.discharge.date}`)
+      ).toBeInTheDocument();
+      expect(screen.getByText('Diagnoses')).toBeInTheDocument();
+      expect(screen.getByText('Disorder of ligament')).toBeInTheDocument();
       expect(
         screen.getByText(`Criteria: ${entry.discharge.criteria}`)
-      ).toBeDefined();
+      ).toBeInTheDocument();
     });
 
     test('Occupational Healthcare entry', () => {
@@ -131,23 +138,27 @@ describe('<PatientDetails />', () => {
         occupationalHealthcareEntryPatient
           .entries[0] as OccupationalHealthcareEntry;
 
-      expect(screen.getByText(formatDate(entry.date))).toBeDefined();
-      expect(screen.getByText(`${entry.description}`)).toBeDefined();
-      expect(screen.getByText(`diagnose by ${entry.specialist}`)).toBeDefined();
-      expect(screen.getByText(`Employer: ${entry.employerName}`)).toBeDefined();
-      expect(screen.getByText('Sick Leave')).toBeDefined();
+      expect(screen.getByText(formatDate(entry.date))).toBeInTheDocument();
+      expect(screen.getByText(`${entry.description}`)).toBeInTheDocument();
+      expect(
+        screen.getByText(`diagnose by ${entry.specialist}`)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(`Employer: ${entry.employerName}`)
+      ).toBeInTheDocument();
+      expect(screen.getByText('Sick Leave')).toBeInTheDocument();
       expect(
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         screen.getByText(`Start date: ${entry.sickLeave?.startDate}`)
-      ).toBeDefined();
+      ).toBeInTheDocument();
       expect(
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         screen.getByText(`End date: ${entry.sickLeave?.endDate}`)
-      ).toBeDefined();
-      expect(screen.getByText('Diagnoses')).toBeDefined();
+      ).toBeInTheDocument();
+      expect(screen.getByText('Diagnoses')).toBeInTheDocument();
       expect(
         screen.getByText('Other specified intervertebral disc displacement')
-      ).toBeDefined();
+      ).toBeInTheDocument();
     });
 
     test('Health Check entry', () => {
@@ -172,10 +183,12 @@ describe('<PatientDetails />', () => {
         />
       );
       const entry = healthCheckEntryPatient.entries[0];
-      expect(screen.getByText(formatDate(entry.date))).toBeDefined();
-      expect(screen.getByText(entry.description)).toBeDefined();
-      expect(screen.getByText(`diagnose by ${entry.specialist}`)).toBeDefined();
-      expect(screen.getByTestId('FavoriteIcon')).toBeDefined();
+      expect(screen.getByText(formatDate(entry.date))).toBeInTheDocument();
+      expect(screen.getByText(entry.description)).toBeInTheDocument();
+      expect(
+        screen.getByText(`diagnose by ${entry.specialist}`)
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('FavoriteIcon')).toBeInTheDocument();
     });
   });
 });
