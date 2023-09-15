@@ -18,8 +18,8 @@ export const DiagnosisSelection = ({
   const field = 'diagnosisCodes';
   const onChange = (data: string[]) => {
     setDiagnoses([...data]);
-    setFieldTouched(field, true);
-    setFieldValue(field, data);
+    void setFieldTouched(field, true);
+    void setFieldValue(field, data);
   };
 
   const stateOptions = diagnoses.map((diagnosis) => ({
