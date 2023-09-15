@@ -12,6 +12,8 @@ import {
   Patient,
 } from '../types';
 
+import { formatDate } from '../utils/patientDetailsHelper';
+
 describe('<PatientDetails />', () => {
   const patient: Patient = {
     id: 'd2773336-f723-11e9-8f0b-362b9e111227',
@@ -88,7 +90,7 @@ describe('<PatientDetails />', () => {
       const entry: HospitalEntry = hospitalEntryPatient
         .entries[0] as HospitalEntry;
 
-      expect(screen.getByText(entry.date)).toBeDefined();
+      expect(screen.getByText(formatDate(entry.date))).toBeDefined();
       expect(screen.getByText(`${entry.description}`)).toBeDefined();
       expect(screen.getByText(`diagnose by ${entry.specialist}`)).toBeDefined();
       expect(screen.getByText('Discharge')).toBeDefined();
@@ -129,7 +131,7 @@ describe('<PatientDetails />', () => {
         occupationalHealthcareEntryPatient
           .entries[0] as OccupationalHealthcareEntry;
 
-      expect(screen.getByText(entry.date)).toBeDefined();
+      expect(screen.getByText(formatDate(entry.date))).toBeDefined();
       expect(screen.getByText(`${entry.description}`)).toBeDefined();
       expect(screen.getByText(`diagnose by ${entry.specialist}`)).toBeDefined();
       expect(screen.getByText(`Employer: ${entry.employerName}`)).toBeDefined();
@@ -170,7 +172,7 @@ describe('<PatientDetails />', () => {
         />
       );
       const entry = healthCheckEntryPatient.entries[0];
-      expect(screen.getByText(entry.date)).toBeDefined();
+      expect(screen.getByText(formatDate(entry.date))).toBeDefined();
       expect(screen.getByText(entry.description)).toBeDefined();
       expect(screen.getByText(`diagnose by ${entry.specialist}`)).toBeDefined();
       expect(screen.getByTestId('FavoriteIcon')).toBeDefined();
