@@ -1,0 +1,36 @@
+# Ignore git and version control
+.git
+.gitignore
+.svn
+
+# Ignore build artifacts and cache directories
+node_modules
+npm-debug.log
+*.log
+dist/
+
+# Ignore system files
+.DS_Store
+*.swp
+*.swo
+
+# Ignore editor directories
+.idea/
+.vscode/
+
+# Ignore environment configuration
+.env
+.env.local
+
+# Ignore OS-specific files
+*.pid
+*.seed
+*.pid.lock
+
+# Exclude backups
+*~
+*.bak
+
+# Exclude potential sensitive information
+secrets.json
+private_key.pem
