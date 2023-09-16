@@ -23,16 +23,16 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/api/ping', (_req, res) => {
+app.get('/ping', (_req, res) => {
   console.log('someone pinged here');
   res.send('pong');
 });
 
-app.use('/api/diagnoses', diagnosesRouter);
-app.use('/api/patients', patientsRouter);
-app.use('/api/users', userRouter);
-app.use('/api/users/login', login);
-app.use('/api/users/logout', logout);
+app.use('/diagnoses', diagnosesRouter);
+app.use('/patients', patientsRouter);
+app.use('/users', userRouter);
+app.use('/users/login', login);
+app.use('/users/logout', logout);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
