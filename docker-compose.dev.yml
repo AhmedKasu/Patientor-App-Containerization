@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  app:
+    image: patientor-frontend-dev
+    build:
+      context: ./patientor-frontend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./patientor-frontend/:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - WDS_SOCKET_PORT=0
+    container_name: patientor-app-dev
+    depends_on:
+      - server
+
+  server:
+    image: patientor-backend-dev
+    build:
+      context: ./patientor-backend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./patientor-backend/:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - MONGO_URL=${MONGO_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    container_name: patientor-server-dev
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo:4.4.18
+    ports:
+      - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./patientor-backend/src/mongo/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+      - ./patientor-backend/mongo_data:/data/db
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - app
+      - server
+
+  debug-helper:
+    image: busybox
